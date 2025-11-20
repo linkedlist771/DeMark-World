@@ -14,14 +14,14 @@ from src.demark_world.utils.imputation_utils import (
 )
 from src.demark_world.utils.video_utils import VideoLoader, merge_frames_with_overlap
 from src.demark_world.watermark_cleaner import WaterMarkCleaner
-from src.demark_world.watermark_detector import SoraWaterMarkDetector
+from src.demark_world.watermark_detector import DeMarkWorldDetector
 
 VIDEO_EXTENSIONS = [".mp4", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".webm"]
 
 
 class DeMarkWorld:
     def __init__(self, cleaner_type: CleanerType = CleanerType.LAMA):
-        self.detector = SoraWaterMarkDetector()
+        self.detector = DeMarkWorldDetector()
         self.cleaner = WaterMarkCleaner(cleaner_type)
         self.cleaner_type = cleaner_type
 
@@ -225,6 +225,15 @@ class DeMarkWorld:
             frame_counter = 0
             overlap_ratio = self.cleaner.config.overlap_ratio
             all_cleaned_frames = None
+            logger.debug(f"bkps_full:{bkps_full}")
+            if len(bkps_full) == 2 and total_frames >= 100:
+                # fallabck segmenation strategy other wise out of memory
+                # This is a comprise...... sorry abot that...
+                sep = 50 
+                bkps_full: list[int] = [ i for i in range(0, total_frames, sep)]
+                if bkps_full[-1] < total_frames:
+                    # bkps_full.append(total_frames)
+                    bkps_full[-1] = total_frames
             # Create overlapping segments for smooth transitions
             num_segments = len(bkps_full) - 1
             for segment_idx in range(num_segments):

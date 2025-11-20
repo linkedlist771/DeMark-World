@@ -184,5 +184,5 @@ cython_debug/
 
 notebooks
 resources/checkpoint/
-.DS_Store
-resources/.DS_Store
+examples
+outputs
