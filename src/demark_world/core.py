@@ -225,6 +225,15 @@ class DeMarkWorld:
             frame_counter = 0
             overlap_ratio = self.cleaner.config.overlap_ratio
             all_cleaned_frames = None
+            logger.debug(f"bkps_full:{bkps_full}")
+            if len(bkps_full) == 2 and total_frames >= 100:
+                # fallabck segmenation strategy other wise out of memory
+                # This is a comprise...... sorry abot that...
+                sep = 50 
+                bkps_full: list[int] = [ i for i in range(0, total_frames, sep)]
+                if bkps_full[-1] < total_frames:
+                    # bkps_full.append(total_frames)
+                    bkps_full[-1] = total_frames
             # Create overlapping segments for smooth transitions
             num_segments = len(bkps_full) - 1
             for segment_idx in range(num_segments):
