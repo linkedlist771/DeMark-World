@@ -5,6 +5,11 @@ English | [中文](README-zh.md)
 **A Universal Framework for AI Video Watermark Removal**
 
 **DeMark-World** is the evolution of [SoraWatermarkCleaner](https://github.com/linkedlist771/SoraWatermarkCleaner). While its predecessor focused on Sora, DeMark-World is a "ready-to-roll" universal framework designed to detect and remove unwanted watermarks from *any* AI-generated video (Sora, Runway, Pika, Kling, etc.) with high fidelity and temporal consistency.
+> Prompt: a cat running in a forest.
+
+
+
+
 
 <table>
   <tr>
@@ -12,7 +17,7 @@ English | [中文](README-zh.md)
       <strong>Sora2</strong>
     </td>
     <td width="80%">
-      <video src="https://github.com/user-attachments/assets/55f4e822-a356-4fab-a372-8910e4cb3c28" 
+      <video src="https://github.com/user-attachments/assets/a92b99fc-a716-4f96-9963-feb85491e84b" 
              width="100%" controls></video>
     </td>
   </tr>
@@ -21,7 +26,7 @@ English | [中文](README-zh.md)
       <strong>Google Veo3.1</strong>
     </td>
     <td>
-      <video src="https://github.com/user-attachments/assets/2773df41-62dc-4876-bd2f-4dd3ccac4b9e" 
+      <video src="https://github.com/user-attachments/assets/de8b7f45-22ac-4871-b59b-9b5837f25432" 
              width="100%" controls></video>
     </td>
   </tr>
@@ -30,7 +35,7 @@ English | [中文](README-zh.md)
       <strong>Ruanway Gen4</strong>
     </td>
     <td>
-      <video src="https://github.com/user-attachments/assets/2bdba310-6379-48f2-a93c-6de857c4df3d" 
+      <video src="https://github.com/user-attachments/assets/435d4888-539b-4670-b364-2a1ac7e211c9" 
              width="100%" controls></video>
     </td>
   </tr>
