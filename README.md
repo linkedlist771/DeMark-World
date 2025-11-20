@@ -1,10 +1,41 @@
 # 🌍 DeMark-World
 
-
+English | [中文](README-zh.md) 
 
 **A Universal Framework for AI Video Watermark Removal**
 
 **DeMark-World** is the evolution of [SoraWatermarkCleaner](https://github.com/linkedlist771/SoraWatermarkCleaner). While its predecessor focused on Sora, DeMark-World is a "ready-to-roll" universal framework designed to detect and remove unwanted watermarks from *any* AI-generated video (Sora, Runway, Pika, Kling, etc.) with high fidelity and temporal consistency.
+
+<table>
+  <tr>
+    <td width="20%">
+      <strong>Sora2</strong>
+    </td>
+    <td width="80%">
+      <video src="https://github.com/user-attachments/assets/55f4e822-a356-4fab-a372-8910e4cb3c28" 
+             width="100%" controls></video>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong>Google Veo3.1</strong>
+    </td>
+    <td>
+      <video src="https://github.com/user-attachments/assets/2773df41-62dc-4876-bd2f-4dd3ccac4b9e" 
+             width="100%" controls></video>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong>Ruanway Gen4</strong>
+    </td>
+    <td>
+      <video src="https://github.com/user-attachments/assets/2bdba310-6379-48f2-a93c-6de857c4df3d" 
+             width="100%" controls></video>
+    </td>
+  </tr>
+</table>
+
 
 
 
@@ -23,13 +54,11 @@ We use **[uv](https://github.com/astral-sh/uv)** for project management. It is s
    Bash
 
    ```
-   git clone https://github.com/yourusername/DeMark-World.git
+   git clone https://github.com/linkedlist771/DeMark-World.git
    cd DeMark-World
    ```
 
 2. **Install environment**
-
-   Bash
 
    ```
    # This creates the virtual environment and installs all dependencies
@@ -37,8 +66,6 @@ We use **[uv](https://github.com/astral-sh/uv)** for project management. It is s
    ```
 
 3. **Activate environment**
-
-   Bash
 
    ```
    # Linux/MacOS
@@ -48,9 +75,7 @@ We use **[uv](https://github.com/astral-sh/uv)** for project management. It is s
    .venv\Scripts\activate
    ```
 
-> **Note on Models**: Detector weights and Inpainting models (Big-LaMa / E2FGVI) will be downloaded automatically to the cache directory upon the first run.
-
-------
+> **Note on Models**: Detector weights and Inpainting models will be downloaded automatically to the cache directory upon the first run.
 
 
 
@@ -68,6 +93,8 @@ streamlit run app.py
 
 Then open your browser to `http://localhost:8501`.
 
+![image](assets/webui.png)
+
 ### 2. Python API
 
 You can integrate DeMark-World into your own pipelines easily.
@@ -80,8 +107,8 @@ from src.demark_world.core import DeMarkWorld
 from src.demark_world.schemas import CleanerType
 
 if __name__ == "__main__":
-    input_video = Path("resources/demo.mp4")
-    output_video = Path("outputs/cleaned.mp4")
+    input_video = Path("resources/Veo3_Cat_Running_In_Forest_Video.mp4")
+    output_video: Path = Path("outputs/cleaned.mp4")
 
     # Option 1: LaMa (Fast)
     demarker = DeMarkWorld(cleaner_type=CleanerType.LAMA)
@@ -92,45 +119,11 @@ if __name__ == "__main__":
     demarker.run(input_video, output_video)
 ```
 
-### 3. CLI Batch Processing
-
-Process entire folders of videos efficiently.
-
-Bash
-
-```
-# Basic usage
-python cli.py -i /path/to/input_folder -o /path/to/output_folder
-
-# Filter specific extensions
-python cli.py -i ./videos -o ./results --pattern "*.mov"
-
-# Silent mode (no progress bar)
-python cli.py -i ./videos --quiet
-```
-
-### 4. API Server
-
-Start a FastAPI server to handle requests remotely.
-
-Bash
-
-```
-python start_server.py
-```
-
-- **Swagger Docs**: Visit `http://localhost:5344/docs` to test the API.
-- **Endpoints**: `/submit_remove_task`, `/get_results`, `/download`.
-
-------
-
 
 
 ## 🧠 How It Works
 
 DeMark-World operates in a two-stage pipeline, it just works like in [SoraWatermarkCleaner](https://github.com/linkedlist771/SoraWatermarkCleaner).
-
-------
 
 
 
@@ -140,31 +133,26 @@ DeMark-World operates in a two-stage pipeline, it just works like in [SoraWaterm
 
 Distributed under the **Apache 2.0 License**. See `LICENSE` for more information.
 
-------
-
 
 
 ## 🖊️ Citation
 
-
-
 If you find this project helpful in your research or work, please cite:
 
-
-
-
+```bash
+@misc{DeMark-World2025,
+  author = {linkedlist771},
+  title = {DeMark-World},
+  year = {2025},
+  url = {https://github.com/linkedlist771/DeMark-World}
+}
+```
 
 ## 🙏 Acknowledgments
 
+- For the incredible implementation of SOTA inpainting models.
+- For the YOLO object detection framework.
 
-
-- : For the incredible implementation of SOTA inpainting models.
-- : For the YOLO object detection framework.
-
-------
-
-<div align="center">
+---
 
 💝 If you find this project helpful, please consider starring the repo!
-
-</div>
