@@ -4,11 +4,9 @@ import time
 from pathlib import Path
 import streamlit as st
 
-# 保持原有的核心引用
 from src.demark_world.core import DeMarkWorld
 from src.demark_world.schemas import CleanerType
 
-# --- 页面配置 ---
 st.set_page_config(
     page_title="DeMark-World | Universal Watermark Remover",
     page_icon="🌍",
@@ -16,15 +14,12 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- 自定义 CSS 样式 ---
 st.markdown(
     """
     <style>
-        /* 隐藏 Streamlit 默认的菜单和 footer */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         
-        /* 标题样式 */
         .main-title {
             font-size: 3.5rem;
             font-weight: 800;
@@ -293,7 +288,6 @@ def process_single_video(uploaded_file):
 
 
 def process_batch_videos(uploaded_files):
-    """处理批量视频的逻辑"""
     with tempfile.TemporaryDirectory() as tmp_dir:
         tmp_path = Path(tmp_dir)
         input_folder = tmp_path / "input"
@@ -303,7 +297,6 @@ def process_batch_videos(uploaded_files):
 
         results = []
 
-        # 总体进度条
         main_progress = st.progress(0)
         status_text = st.empty()
 
@@ -315,14 +308,12 @@ def process_batch_videos(uploaded_files):
                     f"**Processing file {idx + 1}/{total_files}:** `{uploaded_file.name}`"
                 )
 
-                # 保存输入
                 file_path = input_folder / uploaded_file.name
                 with open(file_path, "wb") as f:
                     f.write(uploaded_file.read())
 
                 output_file_path = output_folder / f"demarked_{uploaded_file.name}"
 
-                # 简单的内部进度回调 (可选)
                 def batch_step_progress(p):
                     pass
 
@@ -330,11 +321,9 @@ def process_batch_videos(uploaded_files):
                     file_path, output_file_path, progress_callback=batch_step_progress
                 )
 
-                # 读取并存储结果
                 with open(output_file_path, "rb") as f:
                     results.append({"name": f"demarked_{uploaded_file.name}", "data": f.read()})
 
-                # 更新主进度
                 main_progress.progress((idx + 1) / total_files)
 
             st.session_state.batch_results = results

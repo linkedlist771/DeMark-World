@@ -13,7 +13,7 @@ from src.demark_world.utils.video_utils import VideoLoader
 # based on the sora tempalte to detect the whole, and then got the icon part area.
 
 
-class SoraWaterMarkDetector:
+class DeMarkWorldDetector:
     def __init__(self):
         # download_detector_weights()
         logger.debug(f"Begin to load yolo water mark detet model.")

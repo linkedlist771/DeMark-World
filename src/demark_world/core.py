@@ -14,14 +14,14 @@ from src.demark_world.utils.imputation_utils import (
 )
 from src.demark_world.utils.video_utils import VideoLoader, merge_frames_with_overlap
 from src.demark_world.watermark_cleaner import WaterMarkCleaner
-from src.demark_world.watermark_detector import SoraWaterMarkDetector
+from src.demark_world.watermark_detector import DeMarkWorldDetector
 
 VIDEO_EXTENSIONS = [".mp4", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".webm"]
 
 
 class DeMarkWorld:
     def __init__(self, cleaner_type: CleanerType = CleanerType.LAMA):
-        self.detector = SoraWaterMarkDetector()
+        self.detector = DeMarkWorldDetector()
         self.cleaner = WaterMarkCleaner(cleaner_type)
         self.cleaner_type = cleaner_type
 

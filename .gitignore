@@ -184,3 +184,5 @@ cython_debug/
 
 notebooks
 resources/checkpoint/
+examples
+outputs
