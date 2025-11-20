@@ -1,0 +1,209 @@
+# ---- Project Info and Dependencies ----
+
+[project.urls]
+Repository = "https://github.com/linkedlist771/DeMark-World"
+
+
+[project]
+name = "demark-world"
+description = "A universal framework to remove any unwanted watermark in AI generated video."
+authors = [
+    { name="LLinkedlist", email="72634327+linkedlist771@users.noreply.github.com" },
+]
+readme = "README.md"
+license = "MIT"
+# requires-python = ">=3.12,<4.0"
+# 3.12
+requires-python = "==3.12.*"
+dynamic = ["version"]
+
+# https://pypi.org/classifiers/
+# Adjust as needed:
+classifiers = [
+    # Adjust as needed:
+    "Development Status :: 4 - Beta",
+    # "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+    # Include this to avoid accidentally publishing to PyPI:
+    # "Private :: Do Not Upload",
+]
+
+
+# ---- Main dependencies ----
+dependencies = [
+    "aiofiles>=24.1.0",
+    "aiosqlite>=0.21.0",
+    "clip",
+    "diffusers>=0.35.1",
+    "einops>=0.8.1",
+    "fastapi==0.108.0",
+    "ffmpeg-python>=0.2.0",
+    "fire>=0.7.1",
+    "greenlet>=3.2.4",
+    "httpx>=0.28.1",
+    "huggingface-hub>=0.35.3",
+    "jupyter>=1.1.1",
+    "loguru>=0.7.3",
+    "matplotlib>=3.10.6",
+    "mmcv-full>=1.7.2",
+    "notebook>=7.4.7",
+    "omegaconf>=2.3.0",
+    "opencv-python>=4.12.0.88",
+    "pandas>=2.3.3",
+    "pydantic>=2.11.10",
+    "python-multipart>=0.0.20",
+    "requests>=2.32.5",
+    "ruptures>=1.1.10",
+    "scikit-learn>=1.7.2",
+    "sqlalchemy>=2.0.43",
+    "streamlit>=1.50.0",
+    "torch>=2.5.0",
+    "torchvision>=0.20.0",
+    "tqdm>=4.67.1",
+    "transformers>=4.57.0",
+    "ultralytics>=8.3.204",
+    "uuid>=1.30",
+    "uvicorn>=0.35.0",
+]
+
+
+
+# ---- Dev dependencies ----
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-sugar>=1.0.0",
+    "ruff>=0.11.9",
+    "codespell>=2.4.1",
+    "rich>=14.0.0",
+    "basedpyright>=1.29.1",
+    "funlog>=0.2.1",
+]
+
+[project.scripts]
+# Add script entry points here:
+demark-world = "demark_world:main"
+
+
+# ---- Build system ----
+
+# Dynamic versioning from:
+# https://github.com/ninoseki/uv-dynamic-versioning/
+
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+# Note JSON schemas don't seem to be right for tool.hatch.version.source so
+# this may cause false warnings in IDEs.
+# https://github.com/ninoseki/uv-dynamic-versioning/issues/21
+
+[tool.uv-dynamic-versioning]
+vcs = "git"
+style = "pep440"
+bump = true
+
+[tool.hatch.build.targets.wheel]
+# The source location for the package.
+packages = ["src/demark_world"]
+
+
+# ---- Settings ----
+
+[tool.ruff]
+# Set as desired, typically 88 (black standard) or 100 (wide).
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    # See: https://docs.astral.sh/ruff/rules/
+    # Basic list from: https://docs.astral.sh/ruff/linter/#rule-selection
+    "E", # https://docs.astral.sh/ruff/rules/#error-e
+    "F", # https://docs.astral.sh/ruff/rules/#pyflakes-f
+    "UP", # https://docs.astral.sh/ruff/rules/#pyupgrade-up
+    "B", # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+    "I", # https://docs.astral.sh/ruff/rules/#isort-i
+    # Other possibilities:
+    # "D" # https://docs.astral.sh/ruff/rules/#pydocstyle-d
+    # "Q" # https://docs.astral.sh/ruff/rules/#flake8-quotes-q
+    # "COM" # https://docs.astral.sh/ruff/rules/#flake8-commas-com
+    # "SIM", # https://docs.astral.sh/ruff/rules/#flake8-simplify-sim
+
+]
+ignore = [
+    # Disable some rules that are overly pedantic. Add/remove as desired:
+    "E501", # https://docs.astral.sh/ruff/rules/line-too-long/
+    "E402", # https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file/
+    "E731", # https://docs.astral.sh/ruff/rules/lambda-assignment/
+    # We use both ruff formatter and linter so some rules should always be disabled.
+    # See: https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "W191", # https://docs.astral.sh/ruff/rules/tab-indentation/
+    "E111", # https://docs.astral.sh/ruff/rules/indentation-with-invalid-multiple/
+    "E114", # https://docs.astral.sh/ruff/rules/indentation-with-invalid-multiple-comment/
+    "E117", # https://docs.astral.sh/ruff/rules/over-indented/
+    "D206", # https://docs.astral.sh/ruff/rules/docstring-tab-indentation/
+    "D300", # https://docs.astral.sh/ruff/rules/triple-single-quotes/
+    "Q000", # https://docs.astral.sh/ruff/rules/bad-quotes-inline-string/
+    "Q001", # https://docs.astral.sh/ruff/rules/bad-quotes-multiline-string/
+    "Q002", # https://docs.astral.sh/ruff/rules/bad-quotes-docstring/
+    "Q003", # https://docs.astral.sh/ruff/rules/avoidable-escaped-quote/
+    "COM812", # https://docs.astral.sh/ruff/rules/missing-trailing-comma/
+    "COM819", # https://docs.astral.sh/ruff/rules/prohibited-trailing-comma/
+    "ISC002", # https://docs.astral.sh/ruff/rules/multi-line-implicit-string-concatenation/
+]
+
+[tool.basedpyright]
+# BasedPyright currently seems like the best type checker option, much faster
+# than mypy and with a good extension for VSCode/Cursor.
+# https://marketplace.visualstudio.com/items?itemName=detachhead.basedpyright
+# https://docs.basedpyright.com/latest/configuration/config-files/#sample-pyprojecttoml-file
+include = ["src", "tests", "devtools"]
+# By default BasedPyright is very strict, so you almost certainly want to disable
+# some of the rules.
+# First, these turn off warnings about (yes) how you ignore warnings:
+reportIgnoreCommentWithoutRule = false
+reportUnnecessaryTypeIgnoreComment = false
+# A few typically noisy warnings are next.
+# How many you enable is up to you. The first few are off by default, but you can
+# comment/uncomment these as desired:
+reportMissingTypeStubs = false
+reportUnusedCallResult = false
+reportAny = false
+reportExplicitAny = false
+reportImplicitStringConcatenation = false
+reportUnreachable = false
+# reportPrivateImportUsage = false
+# reportPrivateLocalImportUsage = false
+# reportMissingImports = false
+# reportUnnecessaryIsInstance = false
+# reportUnknownVariableType = false
+# reportUnknownArgumentType = false
+
+[tool.codespell]
+# Add here as needed:
+# ignore-words-list = "foo,bar"
+# skip = "foo.py,bar.py"
+
+[tool.pytest.ini_options]
+python_files = ["*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+testpaths = [
+    "src",
+    "tests",
+]
+norecursedirs = []
+filterwarnings = []
+
+[tool.uv.sources]
+clip = { git = "https://github.com/openai/CLIP.git" }

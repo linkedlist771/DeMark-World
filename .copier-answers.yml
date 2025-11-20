@@ -1,0 +1,12 @@
+# Changes here will be overwritten by Copier. Do not edit manually.
+_commit: v0.2.19
+_src_path: gh:jlevy/simple-modern-uv
+package_author_email: 72634327+linkedlist771@users.noreply.github.com
+package_author_name: LLinkedlist
+package_description: 'A universal framework to remove any unwanted watermark or subtitle
+    in video with just one prompt.
+
+    '
+package_github_org: changeme
+package_module: demark_world
+package_name: demark-world
