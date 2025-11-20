@@ -8,7 +8,8 @@ WATER_MARK_TEMPLATE_IMAGE_PATH = RESOURCES_DIR / "watermark_template.png"
 
 CHECKPOINT_DIR = RESOURCES_DIR / "checkpoint"
 WATER_MARK_DETECT_YOLO_WEIGHTS = CHECKPOINT_DIR / "watermark-best.pt"
-WATER_MARK_DETECT_YOLO_WEIGHTS_HASH_JSON = RESOURCES_DIR / "model_version.json"
+WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL = "https://github.com/linkedlist771/DeMark-World/releases/download/V0.0.1/watermark-best.pt"
+WATER_MARK_DETECT_YOLO_WEIGHTS_HASH_JSON = RESOURCES_DIR / "model_version.json
 
 CHECKPOINT_DIR.mkdir(exist_ok=True, parents=True)
 SPYNET_CHECKPOINT_PATH = CHECKPOINT_DIR / "spynet_20210409-c6c1bd09.pth"

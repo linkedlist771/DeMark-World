@@ -4,10 +4,10 @@ import numpy as np
 from loguru import logger
 from ultralytics import YOLO
 from loguru import logger
-from src.demark_world.configs import WATER_MARK_DETECT_YOLO_WEIGHTS
+from src.demark_world.configs import WATER_MARK_DETECT_YOLO_WEIGHTS, WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL
 from src.demark_world.utils.devices_utils import get_device
 
-# from src.demark_world.utils.download_utils import download_detector_weights
+from src.demark_world.utils.download_utils import ensure_model_downloaded     
 from src.demark_world.utils.video_utils import VideoLoader
 
 # based on the sora tempalte to detect the whole, and then got the icon part area.
@@ -16,6 +16,7 @@ from src.demark_world.utils.video_utils import VideoLoader
 class DeMarkWorldDetector:
     def __init__(self):
         # download_detector_weights()
+        ensure_model_downloaded(WATER_MARK_DETECT_YOLO_WEIGHTS, WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL)
         logger.debug(f"Begin to load yolo water mark detet model.")
         self.model = YOLO(WATER_MARK_DETECT_YOLO_WEIGHTS)
         self.model.to(str(get_device()))
