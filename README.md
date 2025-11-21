@@ -1,7 +1,5 @@
 # 🌍 DeMark-World
 
-English | [中文](README-zh.md) 
-
 **A Universal Framework for AI Video Watermark Removal**
 
 **DeMark-World** is the evolution of [SoraWatermarkCleaner](https://github.com/linkedlist771/SoraWatermarkCleaner). While its predecessor focused on Sora, DeMark-World is a "ready-to-roll" universal framework designed to detect and remove unwanted watermarks from *any* AI-generated video (Sora, Runway, Pika, Kling, etc.) with high fidelity and temporal consistency.
