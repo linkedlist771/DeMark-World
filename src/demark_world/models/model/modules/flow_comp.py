@@ -4,7 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from mmcv.cnn import ConvModule
 from mmcv.runner import load_checkpoint
-
+from demark_world.configs import SPYNET_CHECKPOINT_PATH, PHY_NET_CHECKPOINT_REMOTE_URL
+from demark_world.utils.download_utils import ensure_model_downloaded
 
 class FlowCompletionLoss(nn.Module):
     """Flow completion loss"""
@@ -69,11 +70,14 @@ class SPyNet(nn.Module):
         self.basic_module = nn.ModuleList([SPyNetBasicModule() for _ in range(6)])
 
         if use_pretrain:
-            if isinstance(pretrained, str):
-                print("load pretrained SPyNet...")
-                load_checkpoint(self, pretrained, strict=True)
-            elif pretrained is not None:
-                raise TypeError(f"[pretrained] should be str or None, but got {type(pretrained)}.")
+            # if isinstance(pretrained, str):
+            #     print("load pretrained SPyNet...")
+            #     load_checkpoint(self, pretrained, strict=True)
+            # elif pretrained is not None:
+            #     raise TypeError(f"[pretrained] should be str or None, but got {type(pretrained)}.")
+            ensure_model_downloaded(SPYNET_CHECKPOINT_PATH, PHY_NET_CHECKPOINT_REMOTE_URL)
+            print("load pretrained SPyNet...")
+            load_checkpoint(self, str(SPYNET_CHECKPOINT_PATH), strict=True)
 
         self.register_buffer("mean", torch.Tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
         self.register_buffer("std", torch.Tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))

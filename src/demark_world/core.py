@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Callable
+from typing import Any, Callable
 
 import numpy as np
 from loguru import logger
@@ -223,7 +223,7 @@ class DeMarkWorld:
             ## 2. E2FGVI_HQ Cleaner Strategy with overlap blending.
             input_video_loader = VideoLoader(input_video_path)
             frame_counter = 0
-            overlap_ratio = self.cleaner.config.overlap_ratio
+            overlap_ratio: Any | int = self.cleaner.config.overlap_ratio
             all_cleaned_frames = None
             logger.debug(f"bkps_full:{bkps_full}")
             if len(bkps_full) == 2 and total_frames >= 100:

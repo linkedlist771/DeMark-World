@@ -59,24 +59,6 @@ def _get_local_hash() -> str | None:
     return None
 
 
-def _save_hash(hash_value: str):
-    """Save hash value to JSON file."""
-    WATER_MARK_DETECT_YOLO_WEIGHTS_HASH_JSON.parent.mkdir(parents=True, exist_ok=True)
-    with WATER_MARK_DETECT_YOLO_WEIGHTS_HASH_JSON.open("w") as f:
-        json.dump({"sha256": hash_value}, f)
-    logger.debug(f"Hash saved: {hash_value[:8]}...")
-
-
-def _get_remote_hash() -> str | None:
-    """Get remote model hash from GitHub."""
-    try:
-        response = requests.get(REMOTE_MODEL_VERSION_URL, timeout=10)
-        response.raise_for_status()
-        return response.json().get("sha256")
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Failed to fetch remote hash: {e}")
-        return None
-
 
 def download_detector_weights(force_download: bool = False):
     raise NotImplementedError("Downloading detector weights is not implemented yet.")
