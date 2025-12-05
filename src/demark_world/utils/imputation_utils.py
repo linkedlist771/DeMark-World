@@ -51,3 +51,13 @@ def find_idxs_interval(idxs: List[int], bkps: List[int]) -> List[int]:
         interval_idx = _find_idx_interval(idx)
         intervals.append(interval_idx)
     return intervals
+
+
+
+def refine_bkps_by_chunk_size(bkps: List[int], chunk_size: int) -> List[int]:
+    result = set()
+    for start, end in zip(bkps[:-1], bkps[1:]):
+        result.update(range(start, end, chunk_size))
+        result.add(end)
+    result.add(bkps[0])
+    return sorted(result)

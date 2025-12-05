@@ -12,6 +12,8 @@ from src.demark_world.models.model.e2fgvi_hq import InpaintGenerator
 from src.demark_world.utils.devices_utils import get_device
 from src.demark_world.utils.download_utils import ensure_model_downloaded
 from src.demark_world.utils.video_utils import merge_frames_with_overlap
+from src.demark_world.utils.mem_utils import memory_profiling
+from src.demark_world.constants import CHUNK_SIZE_PER_GB_VRAM
 
 
 def get_ref_index(
@@ -85,6 +87,24 @@ class E2FGVIHDCleaner:
         self.model.load_state_dict(state)
         self.model.eval()
         self.config = config
+        self.profiling_chunk_size()
+
+    def profiling_chunk_size(self):
+        # memory_profiling
+        # 1GB can process about 5 frames in chunk size
+        memory_profiling_results = memory_profiling()
+        adapted_chunk_size = int(
+            memory_profiling_results.free_memory * CHUNK_SIZE_PER_GB_VRAM
+        )
+        self.adapted_chunk_size = adapted_chunk_size
+        logger.debug(
+            # keep two digit
+            f"Chunk size is set to {self.adapted_chunk_size} based on the free VRAM {round(memory_profiling_results.free_memory, 2)}GB"
+        )
+
+    @property
+    def chunk_size(self):
+        return self.adapted_chunk_size
 
     def process_frames_chunk(
         self,
