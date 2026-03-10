@@ -4,11 +4,14 @@ services:
     image: llinkedlist/sorawm:latest
     container_name: demark_world_container
     ports:
-      - 5344:5344
-    command: python start_server.py --host 0.0.0.0 --port 5344
+      - 8501:8501
+    command: streamlit run app.py --server.port 8501
+    environment:
+      - PYTHONPATH=/workspace/src:/workspace
     volumes:
       - ./:/workspace
       - ./.cache:/root/.cache
+      
     deploy:
       resources:
         reservations:
