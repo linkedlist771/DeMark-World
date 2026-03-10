@@ -60,6 +60,7 @@ dependencies = [
     "pydantic>=2.11.10",
     "python-multipart>=0.0.20",
     "requests>=2.32.5",
+    "rich>=14.0.0",
     "ruptures>=1.1.10",
     "scikit-learn>=1.7.2",
     "sqlalchemy>=2.0.43",
@@ -90,7 +91,7 @@ dev = [
 
 [project.scripts]
 # Add script entry points here:
-demark-world = "demark_world:main"
+demark-world = "cli:main"
 
 
 # ---- Build system ----

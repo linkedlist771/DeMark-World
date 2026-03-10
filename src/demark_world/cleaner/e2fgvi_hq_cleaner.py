@@ -7,9 +7,15 @@ from loguru import logger
 from pydantic import BaseModel
 from tqdm import tqdm
 
-from src.demark_world.configs import E2FGVI_HQ_CHECKPOINT_PATH, E2FGVI_HQ_CHECKPOINT_REMOTE_URL
+from src.demark_world.configs import (
+    E2FGVI_HQ_CHECKPOINT_PATH,
+    E2FGVI_HQ_CHECKPOINT_REMOTE_URL,
+    E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS,
+    E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS_BF16,
+    ENABLE_E2FGVI_HQ_TORCH_COMPILE,
+)
 from src.demark_world.models.model.e2fgvi_hq import InpaintGenerator
-from src.demark_world.utils.devices_utils import get_device
+from src.demark_world.utils.devices_utils import get_device, is_bf16_supported
 from src.demark_world.utils.download_utils import ensure_model_downloaded
 from src.demark_world.utils.video_utils import merge_frames_with_overlap
 from src.demark_world.utils.mem_utils import memory_profiling
@@ -73,6 +79,8 @@ class E2FGVIHDConfig(BaseModel):
     neighbor_stride: int = 5
     chunk_size_ratio: float = 0.2  # TODO: this can be adjust as the VRAM
     overlap_ratio: int = 0.05
+    enable_torch_compile: bool = ENABLE_E2FGVI_HQ_TORCH_COMPILE
+    use_bf16: bool = is_bf16_supported()  # Auto-detect bf16 support based on hardware
 
 
 class E2FGVIHDCleaner:
@@ -87,20 +95,70 @@ class E2FGVIHDCleaner:
         self.model.load_state_dict(state)
         self.model.eval()
         self.config = config
+        self.device = device
+
+        # Enable bf16 if configured and supported
+        self.use_bf16 = config.use_bf16 and device.type == "cuda"
+        if self.use_bf16:
+            logger.info("Enabling bf16 inference for E2FGVI_HQ cleaner")
+            self.model = self.model.to(dtype=torch.bfloat16)
+
+        # Flag to track if artifacts have been saved
+        self._artifacts_saved = False
+
         self.profiling_chunk_size()
+        self.auto_compile()
+
+    def auto_compile(self):
+        if self.config.enable_torch_compile:
+            try:
+                self.artifacts_path = (
+                    E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS_BF16
+                    if self.use_bf16
+                    else E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS
+                )
+
+                if self.artifacts_path.exists():
+                    logger.info(
+                        f"Loading cached torch compile artifacts from {self.artifacts_path}"
+                    )
+                    artifact_bytes = self.artifacts_path.read_bytes()
+                    torch.compiler.load_cache_artifacts(artifact_bytes)
+                    compile_mode = "default"
+                    self.model = torch.compile(self.model, mode=compile_mode)
+                    self._artifacts_saved = True
+                else:
+                    logger.info(
+                        f"Compiling model on first inference. Artifacts will be saved to {self.artifacts_path}"
+                    )
+                    compile_mode = "default"
+                    logger.info(f"Using torch.compile mode: {compile_mode}")
+                    self.model = torch.compile(self.model, mode=compile_mode)
+
+            except Exception as e:
+                logger.warning(
+                    f"Device not support torch compile, or compile failed: {e}. using the original model instead."
+                )
+        else:
+            self.artifacts_path = None
 
     def profiling_chunk_size(self):
         # memory_profiling
         # 1GB can process about 5 frames in chunk size
-        memory_profiling_results = memory_profiling()
-        adapted_chunk_size = int(
-            memory_profiling_results.free_memory * CHUNK_SIZE_PER_GB_VRAM
-        )
-        self.adapted_chunk_size = adapted_chunk_size
-        logger.debug(
-            # keep two digit
-            f"Chunk size is set to {self.adapted_chunk_size} based on the free VRAM {round(memory_profiling_results.free_memory, 2)}GB"
-        )
+        if self.device.type != "cuda":
+            self.adapted_chunk_size = CHUNK_SIZE_PER_GB_VRAM
+            logger.debug(
+                f"Non-CUDA device detected. Using default chunk size: {self.adapted_chunk_size}"
+            )
+        else:
+            memory_profiling_results = memory_profiling()
+            adapted_chunk_size = int(
+                memory_profiling_results.free_memory * CHUNK_SIZE_PER_GB_VRAM
+            )
+            self.adapted_chunk_size = adapted_chunk_size
+            logger.debug(
+                f"Chunk size is set to {self.adapted_chunk_size} based on the free VRAM {round(memory_profiling_results.free_memory, 2)}GB"
+            )
 
     @property
     def chunk_size(self):
@@ -142,6 +200,11 @@ class E2FGVIHDCleaner:
             selected_imgs = imgs_chunk[:1, neighbor_ids + ref_ids, :, :, :]
             selected_masks = masks_chunk[:1, neighbor_ids + ref_ids, :, :, :]
 
+            # Convert inputs to bf16 if model is in bf16 mode
+            if self.use_bf16:
+                selected_imgs = selected_imgs.to(dtype=torch.bfloat16)
+                selected_masks = selected_masks.to(dtype=torch.bfloat16)
+
             with torch.no_grad():
                 masked_imgs = selected_imgs * (1 - selected_masks)
                 mod_size_h = 60
@@ -157,6 +220,9 @@ class E2FGVIHDCleaner:
                 pred_imgs, _ = self.model(masked_imgs, len(neighbor_ids))
                 pred_imgs = pred_imgs[:, :, :h, :w]
                 pred_imgs = (pred_imgs + 1) / 2
+                # Convert BFloat16 to Float32 before numpy conversion (numpy doesn't support BFloat16)
+                if pred_imgs.dtype == torch.bfloat16:
+                    pred_imgs = pred_imgs.float()
                 pred_imgs = pred_imgs.cpu().permute(0, 2, 3, 1).numpy() * 255
 
                 for i in range(len(neighbor_ids)):
@@ -224,6 +290,21 @@ class E2FGVIHDCleaner:
                 torch.cuda.empty_cache()
             except:
                 pass
+
+        # Save torch compile artifacts after first inference
+        if self.config.enable_torch_compile and not self._artifacts_saved:
+            try:
+                artifacts = torch.compiler.save_cache_artifacts()
+                if artifacts is not None:
+                    artifact_bytes, _ = artifacts
+                    self.artifacts_path.write_bytes(artifact_bytes)
+                    logger.info(
+                        f"Saved torch compile artifacts to {self.artifacts_path}"
+                    )
+                    self._artifacts_saved = True
+            except Exception as e:
+                logger.warning(f"Failed to save torch compile artifacts: {e}")
+
         return comp_frames
 
 

@@ -1,0 +1,25 @@
+version: '3'
+services:
+  demark-world:
+    image: llinkedlist/sorawm:latest
+    container_name: demark_world_container
+    ports:
+      - 5344:5344
+    command: python start_server.py --host 0.0.0.0 --port 5344
+    volumes:
+      - ./:/workspace
+      - ./.cache:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    tty: true
+    stdin_open: true
+    working_dir: /workspace
+    shm_size: '16gb'
+
+volumes:
+  huggingface_cache:

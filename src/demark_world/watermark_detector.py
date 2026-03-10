@@ -1,13 +1,13 @@
 from pathlib import Path
+from typing import List
 
 import numpy as np
 from loguru import logger
 from ultralytics import YOLO
-from loguru import logger
+
 from src.demark_world.configs import WATER_MARK_DETECT_YOLO_WEIGHTS, WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL
 from src.demark_world.utils.devices_utils import get_device
-
-from src.demark_world.utils.download_utils import ensure_model_downloaded     
+from src.demark_world.utils.download_utils import ensure_model_downloaded
 from src.demark_world.utils.video_utils import VideoLoader
 
 # based on the sora tempalte to detect the whole, and then got the icon part area.
@@ -15,7 +15,6 @@ from src.demark_world.utils.video_utils import VideoLoader
 
 class DeMarkWorldDetector:
     def __init__(self):
-        # download_detector_weights()
         ensure_model_downloaded(WATER_MARK_DETECT_YOLO_WEIGHTS, WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL)
         logger.debug(f"Begin to load yolo water mark detet model.")
         self.model = YOLO(WATER_MARK_DETECT_YOLO_WEIGHTS)
@@ -23,19 +22,8 @@ class DeMarkWorldDetector:
         self.model.eval()
         logger.debug(f"Yolo water mark detet model loaded from {WATER_MARK_DETECT_YOLO_WEIGHTS}.")
 
-        self.model.eval()
-
-    def detect(self, input_image: np.ndarray):
-        # import cv2
-        # # cv2.imshow("input_image", input_image)
-        # cv2.imwrite("input_image.png", input_image)
-        # raise RuntimeError()
-
-        results = self.model.predict(source=input_image, conf=0.05, verbose=False, stream=False)
-        # logger.error(f"input_image.shape:{input_image.shape}\nresults: {results}")
-
-        result = results[0]
-
+    def _parse_detect_results(self, result) -> dict:
+        """Parse YOLO detection result into a standardized dictionary format."""
         if len(result.boxes) == 0:
             return {"detected": False, "bbox": None, "confidence": None, "center": None}
 
@@ -52,6 +40,27 @@ class DeMarkWorldDetector:
             "confidence": confidence,
             "center": (int(center_x), int(center_y)),
         }
+
+    def detect(self, input_image: np.ndarray) -> dict:
+        results = self.model(input_image, verbose=False)
+        result = results[0]
+        return self._parse_detect_results(result)
+
+    def detect_batch(self, input_images: List[np.ndarray], batch_size: int) -> List[dict]:
+        if not input_images:
+            return []
+
+        all_results = []
+
+        for i in range(0, len(input_images), batch_size):
+            batch_images = input_images[i : i + batch_size]
+            batch_results = self.model(batch_images, verbose=False)
+
+            for result in batch_results:
+                parsed_result = self._parse_detect_results(result)
+                all_results.append(parsed_result)
+
+        return all_results
 
 
 if __name__ == "__main__":

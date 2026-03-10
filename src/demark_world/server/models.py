@@ -13,6 +13,7 @@ class Task(Base):
     video_path: Mapped[str] = mapped_column(String, nullable=False)
     output_path: Mapped[str] = mapped_column(String, nullable=True)
     status: Mapped[str] = mapped_column(String, nullable=False, default="PROCESSING")
+    cleaner_type: Mapped[str] = mapped_column(String, nullable=False, default="lama")
     percentage: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     download_url: Mapped[str] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)

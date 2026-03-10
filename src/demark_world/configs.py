@@ -1,7 +1,6 @@
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent.parent
-print(ROOT)
 
 RESOURCES_DIR = ROOT / "resources"
 WATER_MARK_TEMPLATE_IMAGE_PATH = RESOURCES_DIR / "watermark_template.png"
@@ -37,6 +36,37 @@ DATA_PATH = ROOT / "data"
 DATA_PATH.mkdir(exist_ok=True, parents=True)
 
 SQLITE_PATH = DATA_PATH / "db.sqlite3"
+
+FRONTUI_DIR = ROOT / "frontend"
+FRONTUI_DIR.mkdir(exist_ok=True, parents=True)
+
+FRONTUI_DIST_DIR = FRONTUI_DIR / "dist"
+FRONTUI_DIST_DIR.mkdir(exist_ok=True, parents=True)
+
+FRONTUI_DIST_DIR_ASSETS = FRONTUI_DIST_DIR / "assets"
+FRONTUI_DIST_DIR_ASSETS.mkdir(exist_ok=True, parents=True)
+
+FRONTUI_DIST_DIR_INDEX_HTML = FRONTUI_DIST_DIR / "index.html"
+
+
+## TORCH COMPILE
+
+ENABLE_E2FGVI_HQ_TORCH_COMPILE = True
+
+TORCH_COMPILE_DIR = Path("~").expanduser() / ".cache" / "torch_compile"
+TORCH_COMPILE_DIR.mkdir(exist_ok=True, parents=True)
+
+E2FGVI_HQ_TORCH_COMPILE_DIR = TORCH_COMPILE_DIR / "e2fgvi_hq"
+E2FGVI_HQ_TORCH_COMPILE_DIR.mkdir(exist_ok=True, parents=True)
+
+E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS = E2FGVI_HQ_TORCH_COMPILE_DIR / "artifacts.bin"
+E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS_BF16 = (
+    E2FGVI_HQ_TORCH_COMPILE_DIR / "artifacts_bf16.bin"
+)
+
+
+## YOLO BATCH SIZE
+DEFAULT_DETECT_BATCH_SIZE = 4
 
 if __name__ == "__main__":
     from loguru import logger

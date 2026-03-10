@@ -46,6 +46,16 @@
 
 Moving beyond just Sora v2 in [SoraWatermarkCleaner](https://github.com/linkedlist771/SoraWatermarkCleaner), DeMark-World is engineered to handle watermarks from the latest generation of video models, including **Google Gemini/Veo**, **Runway Gen-3/Gen-4**, **Pika**, **Kling**, and **Luma Dream Machine**.
 
+| Feature | Details |
+|---|---|
+| **Universal detection** | Works with Sora, Runway, Pika, Kling, Veo, and more |
+| **2 inpainting backends** | LaMa (fast) · E2FGVI-HQ (temporally consistent) |
+| **Batch YOLO detection** | Processes frames in GPU batches (`--batch-size 4`) for ~2× detection throughput |
+| **BF16 inference** | Auto-enabled on supported GPUs (Ampere+) via `torch.cuda.is_bf16_supported()` |
+| **TorchCompile** | `torch.compile` with artifact caching for persistent speedup across runs |
+| **4 interfaces** | Web UI · Python API · CLI · REST Server |
+| **Docker support** | GPU-enabled `docker-compose.yaml` included |
+
 ## 🛠️ Installation
 
 **Prerequisites**: You must have [FFmpeg](https://ffmpeg.org/) installed and added to your system PATH.
@@ -88,9 +98,7 @@ We use **[uv](https://github.com/astral-sh/uv)** for project management. It is s
 
 The easiest way to use DeMark-World is via the modern Streamlit interface.
 
-Bash
-
-```
+```bash
 streamlit run app.py
 ```
 
@@ -98,13 +106,32 @@ Then open your browser to `http://localhost:8501`.
 
 ![image](assets/webui.png)
 
-### 2. Python API
+### 2. CLI
+
+Process an entire folder of videos from the command line with a rich progress display:
+
+```bash
+# Basic usage (LaMa, fast)
+demark-world -i /path/to/videos -o /path/to/output
+
+# High quality, time-consistent (E2FGVI-HQ)
+demark-world -i /path/to/videos -o /path/to/output --model e2fgvi_hq
+
+# Max performance on CUDA (BF16 + TorchCompile, auto-enabled on supported GPUs)
+demark-world -i /path/to/videos -o /path/to/output --model e2fgvi_hq --torch-compile
+
+# Adjust detection batch size
+demark-world -i /path/to/videos -o /path/to/output --batch-size 8
+
+# Suppress internal progress bars
+demark-world -i /path/to/videos -o /path/to/output --quiet
+```
+
+### 3. Python API
 
 You can integrate DeMark-World into your own pipelines easily.
 
-Python
-
-```
+```python
 from pathlib import Path
 from src.demark_world.core import DeMarkWorld
 from src.demark_world.schemas import CleanerType
@@ -115,18 +142,70 @@ if __name__ == "__main__":
 
     # Option 1: LaMa (Fast)
     demarker = DeMarkWorld(cleaner_type=CleanerType.LAMA)
-    
+
     # Option 2: E2FGVI_HQ (High Quality + Time Consistent)
+    # BF16 and batch detection are auto-configured based on your hardware
     # demarker = DeMarkWorld(cleaner_type=CleanerType.E2FGVI_HQ)
 
     demarker.run(input_video, output_video)
 ```
 
+### 4. REST Server
+
+Start the API server for queue-based async processing:
+
+```bash
+python start_server.py --host 0.0.0.0 --port 5344
+```
+
+**Endpoints:**
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/submit_remove_task` | Submit a video; accepts `?cleaner_type=lama\|e2fgvi_hq` |
+| `GET` | `/get_results?remove_task_id=<id>` | Poll task status and progress |
+| `GET` | `/get_queue_status` | View queue depth and all task states |
+| `GET` | `/download/<task_id>` | Download the processed video |
+
+```bash
+# Submit a task (LAMA, default)
+curl -X POST http://localhost:5344/submit_remove_task \
+  -F "video=@input.mp4"
+
+# Submit with E2FGVI_HQ
+curl -X POST "http://localhost:5344/submit_remove_task?cleaner_type=e2fgvi_hq" \
+  -F "video=@input.mp4"
+
+# Check queue
+curl http://localhost:5344/get_queue_status
+```
+
+### 5. Docker
+
+```bash
+docker compose up
+```
+
+The server will be available at `http://localhost:5344`. GPU passthrough is configured automatically.
+
 
 
 ## 🧠 How It Works
 
-DeMark-World operates in a two-stage pipeline, it just works like in [SoraWatermarkCleaner](https://github.com/linkedlist771/SoraWatermarkCleaner).
+DeMark-World operates in a two-stage pipeline:
+
+1. **Detection** — A YOLO model scans every frame (in GPU batches) to locate the watermark bounding box. Missed detections are imputed using interval-averaged bounding boxes from neighboring frames.
+2. **Inpainting** — The detected region is inpainted using the selected backend:
+   - **LaMa**: per-frame, fast, suitable for static watermarks.
+   - **E2FGVI-HQ**: processes overlapping temporal segments for smooth, flicker-free results.
+
+### ⚡ Performance
+
+| Optimization | How it's applied |
+|---|---|
+| **Batch YOLO detection** | Frames are accumulated into batches (`DEFAULT_DETECT_BATCH_SIZE=4`) before GPU inference |
+| **BF16 inference** | Auto-detected via `torch.cuda.is_bf16_supported()` — enabled by default on Ampere (RTX 30xx/40xx, A100, H100) and newer |
+| **TorchCompile** | `torch.compile(mode="default")` with artifact caching in `~/.cache/torch_compile/e2fgvi_hq/` — first run compiles once, subsequent runs load from cache |
 
 
 

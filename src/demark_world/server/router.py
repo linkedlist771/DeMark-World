@@ -2,10 +2,11 @@ from pathlib import Path
 from uuid import uuid4
 
 import aiofiles
-from fastapi import APIRouter, BackgroundTasks, File, HTTPException, UploadFile
+from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse
 
-from src.demark_world.server.schemas import WMRemoveResults
+from src.demark_world.schemas import CleanerType
+from src.demark_world.server.schemas import QueueStatusResponse, WMRemoveResults
 from src.demark_world.server.worker import worker
 
 router = APIRouter()
@@ -20,9 +21,18 @@ async def process_upload_and_queue(task_id: str, video_content: bytes, video_pat
         await worker.mark_task_error(task_id, str(e))
 
 
+@router.get("/get_queue_status")
+async def get_queue_status() -> QueueStatusResponse:
+    return await worker.get_queue_status()
+
+
 @router.post("/submit_remove_task")
-async def submit_remove_task(background_tasks: BackgroundTasks, video: UploadFile = File(...)):
-    task_id = await worker.create_task()
+async def submit_remove_task(
+    background_tasks: BackgroundTasks,
+    video: UploadFile = File(...),
+    cleaner_type: CleanerType = Query(default=CleanerType.LAMA),
+):
+    task_id = await worker.create_task(cleaner_type)
     content = await video.read()
     upload_filename = f"{uuid4()}_{video.filename}"
     video_path = worker.upload_dir / upload_filename

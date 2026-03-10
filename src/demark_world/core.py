@@ -6,7 +6,9 @@ from loguru import logger
 from tqdm import tqdm
 
 import ffmpeg
+from src.demark_world.configs import DEFAULT_DETECT_BATCH_SIZE, ENABLE_E2FGVI_HQ_TORCH_COMPILE
 from src.demark_world.schemas import CleanerType
+from src.demark_world.utils.devices_utils import is_bf16_supported
 from src.demark_world.utils.imputation_utils import (
     find_2d_data_bkps,
     find_idxs_interval,
@@ -21,10 +23,17 @@ VIDEO_EXTENSIONS = [".mp4", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".webm"]
 
 
 class DeMarkWorld:
-    def __init__(self, cleaner_type: CleanerType = CleanerType.LAMA):
+    def __init__(
+        self,
+        cleaner_type: CleanerType = CleanerType.LAMA,
+        enable_torch_compile: bool = ENABLE_E2FGVI_HQ_TORCH_COMPILE,
+        detect_batch_size: int = DEFAULT_DETECT_BATCH_SIZE,
+        use_bf16: bool = is_bf16_supported(),
+    ):
         self.detector = DeMarkWorldDetector()
-        self.cleaner = WaterMarkCleaner(cleaner_type)
+        self.cleaner = WaterMarkCleaner(cleaner_type, enable_torch_compile, use_bf16=use_bf16)
         self.cleaner_type = cleaner_type
+        self.detect_batch_size = detect_batch_size
 
     def run_batch(
         self,
@@ -123,6 +132,10 @@ class DeMarkWorld:
             logger.debug(
                 f"total frames: {total_frames}, fps: {fps}, width: {width}, height: {height}"
             )
+        # Batch detection: accumulate frames and process in batches
+        batch_frames = []
+        batch_indices = []
+
         for idx, frame in enumerate(
             tqdm(
                 input_video_loader,
@@ -131,22 +144,56 @@ class DeMarkWorld:
                 disable=quiet,
             )
         ):
-            detection_result = self.detector.detect(frame)
-            if detection_result["detected"]:
-                frame_bboxes[idx] = {"bbox": detection_result["bbox"]}
-                x1, y1, x2, y2 = detection_result["bbox"]
-                bbox_centers.append((int((x1 + x2) / 2), int((y1 + y2) / 2)))
-                bboxes.append((x1, y1, x2, y2))
+            batch_frames.append(frame)
+            batch_indices.append(idx)
 
-            else:
-                frame_bboxes[idx] = {"bbox": None}
-                detect_missed.append(idx)
-                bbox_centers.append(None)
-                bboxes.append(None)
-            # 10% - 50%
-            if progress_callback and idx % 10 == 0:
-                progress = 10 + int((idx / total_frames) * 40)
-                progress_callback(progress)
+            if len(batch_frames) >= self.detect_batch_size:
+                batch_results = self.detector.detect_batch(
+                    batch_frames, batch_size=self.detect_batch_size
+                )
+
+                for batch_idx, detection_result in zip(batch_indices, batch_results):
+                    if detection_result["detected"]:
+                        frame_bboxes[batch_idx] = {"bbox": detection_result["bbox"]}
+                        x1, y1, x2, y2 = detection_result["bbox"]
+                        bbox_centers.append((int((x1 + x2) / 2), int((y1 + y2) / 2)))
+                        bboxes.append((x1, y1, x2, y2))
+                    else:
+                        frame_bboxes[batch_idx] = {"bbox": None}
+                        detect_missed.append(batch_idx)
+                        bbox_centers.append(None)
+                        bboxes.append(None)
+
+                    # 10% - 50%
+                    if progress_callback and batch_idx % 10 == 0:
+                        progress = 10 + int((batch_idx / total_frames) * 40)
+                        progress_callback(progress)
+
+                batch_frames.clear()
+                batch_indices.clear()
+
+        # Process remaining frames if any
+        if batch_frames:
+            batch_results = self.detector.detect_batch(
+                batch_frames, batch_size=self.detect_batch_size
+            )
+
+            for batch_idx, detection_result in zip(batch_indices, batch_results):
+                if detection_result["detected"]:
+                    frame_bboxes[batch_idx] = {"bbox": detection_result["bbox"]}
+                    x1, y1, x2, y2 = detection_result["bbox"]
+                    bbox_centers.append((int((x1 + x2) / 2), int((y1 + y2) / 2)))
+                    bboxes.append((x1, y1, x2, y2))
+                else:
+                    frame_bboxes[batch_idx] = {"bbox": None}
+                    detect_missed.append(batch_idx)
+                    bbox_centers.append(None)
+                    bboxes.append(None)
+
+                # 10% - 50%
+                if progress_callback and batch_idx % 10 == 0:
+                    progress = 10 + int((batch_idx / total_frames) * 40)
+                    progress_callback(progress)
         if not quiet:
             logger.debug(f"detect missed frames: {detect_missed}")
         bkps_full = [0, total_frames]
