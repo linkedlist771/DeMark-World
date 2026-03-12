@@ -208,3 +208,7 @@ filterwarnings = []
 
 [tool.uv.sources]
 clip = { git = "https://github.com/openai/CLIP.git" }
+
+[tool.uv.extra-build-dependencies]
+clip = ["setuptools<75"]
+mmcv-full = ["setuptools<75"]
