@@ -4,11 +4,11 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
     extract_into_tensor,
     make_beta_schedule,
 )
-from src.demark_world.iopaint.model.anytext.ldm.util import default
+from demark_world.iopaint.model.anytext.ldm.util import default
 
 
 class AbstractLowScaleModel(nn.Module):

@@ -16,22 +16,22 @@ from torch.optim.lr_scheduler import LambdaLR
 from torchvision.utils import make_grid
 from tqdm import tqdm
 
-from src.demark_world.iopaint.model.anytext.ldm.models.autoencoder import (
+from demark_world.iopaint.model.anytext.ldm.models.autoencoder import (
     AutoencoderKL,
     IdentityFirstStage,
 )
-from src.demark_world.iopaint.model.anytext.ldm.models.diffusion.ddim import DDIMSampler
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
+from demark_world.iopaint.model.anytext.ldm.models.diffusion.ddim import DDIMSampler
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
     extract_into_tensor,
     make_beta_schedule,
     noise_like,
 )
-from src.demark_world.iopaint.model.anytext.ldm.modules.distributions.distributions import (
+from demark_world.iopaint.model.anytext.ldm.modules.distributions.distributions import (
     DiagonalGaussianDistribution,
     normal_kl,
 )
-from src.demark_world.iopaint.model.anytext.ldm.modules.ema import LitEma
-from src.demark_world.iopaint.model.anytext.ldm.util import (
+from demark_world.iopaint.model.anytext.ldm.modules.ema import LitEma
+from demark_world.iopaint.model.anytext.ldm.util import (
     count_params,
     default,
     exists,

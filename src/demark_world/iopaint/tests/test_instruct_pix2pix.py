@@ -3,9 +3,9 @@ from pathlib import Path
 import pytest
 import torch
 
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import HDStrategy
-from src.demark_world.iopaint.tests.utils import assert_equal, check_device, current_dir, get_config
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import HDStrategy
+from demark_world.iopaint.tests.utils import assert_equal, check_device, current_dir, get_config
 
 model_name = "timbrooks/instruct-pix2pix"
 

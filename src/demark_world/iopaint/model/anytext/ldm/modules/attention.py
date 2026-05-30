@@ -10,7 +10,7 @@ import torch.nn.functional as F
 from einops import rearrange, repeat
 from torch import einsum, nn
 
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import checkpoint
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import checkpoint
 
 _ATTN_PRECISION = os.environ.get("ATTN_PRECISION", "fp32")
 

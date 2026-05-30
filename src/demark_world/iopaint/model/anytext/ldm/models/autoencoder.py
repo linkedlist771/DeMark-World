@@ -3,15 +3,15 @@ from contextlib import contextmanager
 import torch
 import torch.nn.functional as F
 
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.model import (
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.model import (
     Decoder,
     Encoder,
 )
-from src.demark_world.iopaint.model.anytext.ldm.modules.distributions.distributions import (
+from demark_world.iopaint.model.anytext.ldm.modules.distributions.distributions import (
     DiagonalGaussianDistribution,
 )
-from src.demark_world.iopaint.model.anytext.ldm.modules.ema import LitEma
-from src.demark_world.iopaint.model.anytext.ldm.util import instantiate_from_config
+from demark_world.iopaint.model.anytext.ldm.modules.ema import LitEma
+from demark_world.iopaint.model.anytext.ldm.util import instantiate_from_config
 
 
 class AutoencoderKL(torch.nn.Module):

@@ -1,15 +1,15 @@
 import os
 
-from src.demark_world.iopaint.tests.utils import check_device, current_dir
+from demark_world.iopaint.tests.utils import check_device, current_dir
 
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
 import pytest
 import torch
 
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import HDStrategy, SDSampler
-from src.demark_world.iopaint.tests.test_model import assert_equal, get_config
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import HDStrategy, SDSampler
+from demark_world.iopaint.tests.test_model import assert_equal, get_config
 
 
 @pytest.mark.parametrize("device", ["cuda", "mps"])

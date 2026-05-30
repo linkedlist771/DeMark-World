@@ -1,23 +1,24 @@
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
+import ffmpeg
 import numpy as np
 from loguru import logger
 from tqdm import tqdm
 
-import ffmpeg
-from src.demark_world.configs import DEFAULT_DETECT_BATCH_SIZE, ENABLE_E2FGVI_HQ_TORCH_COMPILE
-from src.demark_world.schemas import CleanerType
-from src.demark_world.utils.devices_utils import is_bf16_supported
-from src.demark_world.utils.imputation_utils import (
+from demark_world.configs import DEFAULT_DETECT_BATCH_SIZE, ENABLE_E2FGVI_HQ_TORCH_COMPILE
+from demark_world.schemas import CleanerType
+from demark_world.utils.devices_utils import is_bf16_supported
+from demark_world.utils.imputation_utils import (
     find_2d_data_bkps,
     find_idxs_interval,
     get_interval_average_bbox,
+    refine_bkps_by_chunk_size,
 )
-from src.demark_world.utils.video_utils import VideoLoader, merge_frames_with_overlap
-from src.demark_world.watermark_cleaner import WaterMarkCleaner
-from src.demark_world.watermark_detector import DeMarkWorldDetector
-from src.demark_world.utils.imputation_utils import refine_bkps_by_chunk_size
+from demark_world.utils.video_utils import VideoLoader, merge_frames_with_overlap
+from demark_world.watermark_cleaner import WaterMarkCleaner
+from demark_world.watermark_detector import DeMarkWorldDetector
 
 VIDEO_EXTENSIONS = [".mp4", ".avi", ".mov", ".mkv", ".flv", ".wmv", ".webm"]
 
@@ -62,7 +63,7 @@ class DeMarkWorld:
             output_video_path = output_video_dir_path / input_video_path.name
             if progress_callback:
 
-                def batch_progress_callback(single_video_progress: int):
+                def batch_progress_callback(single_video_progress: int, idx: int = idx):
                     overall_progress = int(
                         (idx / video_lengths) * 100 + (single_video_progress / video_lengths)
                     )
@@ -152,7 +153,7 @@ class DeMarkWorld:
                     batch_frames, batch_size=self.detect_batch_size
                 )
 
-                for batch_idx, detection_result in zip(batch_indices, batch_results):
+                for batch_idx, detection_result in zip(batch_indices, batch_results, strict=False):
                     if detection_result["detected"]:
                         frame_bboxes[batch_idx] = {"bbox": detection_result["bbox"]}
                         x1, y1, x2, y2 = detection_result["bbox"]
@@ -178,7 +179,7 @@ class DeMarkWorld:
                 batch_frames, batch_size=self.detect_batch_size
             )
 
-            for batch_idx, detection_result in zip(batch_indices, batch_results):
+            for batch_idx, detection_result in zip(batch_indices, batch_results, strict=False):
                 if detection_result["detected"]:
                     frame_bboxes[batch_idx] = {"bbox": detection_result["bbox"]}
                     x1, y1, x2, y2 = detection_result["bbox"]
@@ -212,11 +213,11 @@ class DeMarkWorld:
             # 3. find the interval index of each missed frame
             missed_intervals = find_idxs_interval(detect_missed, bkps_full)
             # logger.debug(
-            #     f"missed frame intervals: {list(zip(detect_missed, missed_intervals))}"
+            #     f"missed frame intervals: {list(zip(detect_missed, missed_intervals, strict=False))}"
             # )
 
             # 4. fill the missed frames with the average bbox of the corresponding interval
-            for missed_idx, interval_idx in zip(detect_missed, missed_intervals):
+            for missed_idx, interval_idx in zip(detect_missed, missed_intervals, strict=False):
                 if (
                     interval_idx < len(interval_bboxes)
                     and interval_bboxes[interval_idx] is not None
@@ -280,7 +281,7 @@ class DeMarkWorld:
             # if len(bkps_full) == 2 and total_frames >= 100:
             #     # fallabck segmenation strategy other wise out of memory
             #     # This is a comprise...... sorry abot that...
-            #     sep = 50 
+            #     sep = 50
             #     bkps_full: list[int] = [ i for i in range(0, total_frames, sep)]
             #     if bkps_full[-1] < total_frames:
             #         # bkps_full.append(total_frames)

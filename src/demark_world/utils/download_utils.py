@@ -6,7 +6,7 @@ import requests
 from loguru import logger
 from tqdm import tqdm
 
-from src.demark_world.configs import (
+from demark_world.configs import (
     WATER_MARK_DETECT_YOLO_WEIGHTS,
     WATER_MARK_DETECT_YOLO_WEIGHTS_HASH_JSON,
 )

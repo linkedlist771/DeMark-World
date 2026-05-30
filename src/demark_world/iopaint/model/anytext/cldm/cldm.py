@@ -9,26 +9,26 @@ import torch.nn as nn
 from easydict import EasyDict as edict
 from einops import rearrange, repeat
 
-from src.demark_world.iopaint.model.anytext.ldm.models.diffusion.ddim import DDIMSampler
-from src.demark_world.iopaint.model.anytext.ldm.models.diffusion.ddpm import LatentDiffusion
-from src.demark_world.iopaint.model.anytext.ldm.modules.attention import SpatialTransformer
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.openaimodel import (
+from demark_world.iopaint.model.anytext.ldm.models.diffusion.ddim import DDIMSampler
+from demark_world.iopaint.model.anytext.ldm.models.diffusion.ddpm import LatentDiffusion
+from demark_world.iopaint.model.anytext.ldm.modules.attention import SpatialTransformer
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.openaimodel import (
     AttentionBlock,
     Downsample,
     ResBlock,
     TimestepEmbedSequential,
     UNetModel,
 )
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
     conv_nd,
     linear,
     timestep_embedding,
     zero_module,
 )
-from src.demark_world.iopaint.model.anytext.ldm.modules.distributions.distributions import (
+from demark_world.iopaint.model.anytext.ldm.modules.distributions.distributions import (
     DiagonalGaussianDistribution,
 )
-from src.demark_world.iopaint.model.anytext.ldm.util import (
+from demark_world.iopaint.model.anytext.ldm.util import (
     exists,
     instantiate_from_config,
     log_txt_as_img,

@@ -7,12 +7,12 @@ from uuid import uuid4
 from loguru import logger
 from sqlalchemy import select
 
-from src.demark_world.configs import WORKING_DIR
-from src.demark_world.core import DeMarkWorld
-from src.demark_world.schemas import CleanerType
-from src.demark_world.server.db import get_session
-from src.demark_world.server.models import Task
-from src.demark_world.server.schemas import (
+from demark_world.configs import WORKING_DIR
+from demark_world.core import DeMarkWorld
+from demark_world.schemas import CleanerType
+from demark_world.server.db import get_session
+from demark_world.server.models import Task
+from demark_world.server.schemas import (
     QueueStatusResponse,
     QueueSummary,
     QueueTaskInfo,

@@ -4,7 +4,7 @@ import torch
 from loguru import logger
 from PIL import Image
 
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.schema import InpaintRequest
 
 from ...const import POWERPAINT_NAME
 from ..base import DiffusionInpaintModel

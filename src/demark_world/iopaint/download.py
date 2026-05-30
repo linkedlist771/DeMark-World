@@ -7,7 +7,7 @@ from typing import List, Optional
 
 from loguru import logger
 
-from src.demark_world.iopaint.const import (
+from demark_world.iopaint.const import (
     ANYTEXT_NAME,
     DEFAULT_MODEL_DIR,
     DIFFUSERS_SD_CLASS_NAME,
@@ -15,13 +15,13 @@ from src.demark_world.iopaint.const import (
     DIFFUSERS_SDXL_CLASS_NAME,
     DIFFUSERS_SDXL_INPAINT_CLASS_NAME,
 )
-from src.demark_world.iopaint.model.original_sd_configs import get_config_files
-from src.demark_world.iopaint.schema import ModelInfo, ModelType
+from demark_world.iopaint.model.original_sd_configs import get_config_files
+from demark_world.iopaint.schema import ModelInfo, ModelType
 
 
 def cli_download_model(model: str):
-    from src.demark_world.iopaint.model import models
-    from src.demark_world.iopaint.model.utils import handle_from_pretrained_exceptions
+    from demark_world.iopaint.model import models
+    from demark_world.iopaint.model.utils import handle_from_pretrained_exceptions
 
     if model in models and models[model].is_erase_model:
         logger.info(f"Downloading {model}...")
@@ -181,7 +181,7 @@ def scan_single_file_diffusion_models(cache_dir) -> List[ModelInfo]:
 
 def scan_inpaint_models(model_dir: Path) -> List[ModelInfo]:
     res = []
-    from src.demark_world.iopaint.model import models
+    from demark_world.iopaint.model import models
 
     # logger.info(f"Scanning inpaint models in {model_dir}")
 

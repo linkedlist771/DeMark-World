@@ -8,7 +8,7 @@ from pathlib import Path
 mimetypes.add_type("application/javascript", ".js")
 mimetypes.add_type("text/css", ".css")
 
-from src.demark_world.iopaint.schema import (
+from demark_world.iopaint.schema import (
     ApiConfig,
     Device,
     InteractiveSegModel,
@@ -24,8 +24,8 @@ from json import JSONDecodeError
 import gradio as gr
 from loguru import logger
 
-from src.demark_world.iopaint.const import *
-from src.demark_world.iopaint.download import scan_models
+from demark_world.iopaint.const import *
+from demark_world.iopaint.download import scan_models
 
 _config_file: Path = None
 

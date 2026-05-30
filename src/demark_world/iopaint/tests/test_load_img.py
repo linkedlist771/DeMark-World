@@ -1,5 +1,5 @@
-from src.demark_world.iopaint.helper import load_img
-from src.demark_world.iopaint.tests.utils import current_dir
+from demark_world.iopaint.helper import load_img
+from demark_world.iopaint.tests.utils import current_dir
 
 png_img_p = current_dir / "image.png"
 jpg_img_p = current_dir / "bunny.jpeg"

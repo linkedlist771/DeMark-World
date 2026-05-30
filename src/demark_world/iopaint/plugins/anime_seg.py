@@ -5,9 +5,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from PIL import Image
 
-from src.demark_world.iopaint.helper import load_model
-from src.demark_world.iopaint.plugins.base_plugin import BasePlugin
-from src.demark_world.iopaint.schema import RunPluginRequest
+from demark_world.iopaint.helper import load_model
+from demark_world.iopaint.plugins.base_plugin import BasePlugin
+from demark_world.iopaint.schema import RunPluginRequest
 
 
 class REBNCONV(nn.Module):

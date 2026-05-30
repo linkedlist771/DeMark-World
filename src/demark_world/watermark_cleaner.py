@@ -1,7 +1,7 @@
-from src.demark_world.cleaner.e2fgvi_hq_cleaner import E2FGVIHDCleaner, E2FGVIHDConfig
-from src.demark_world.cleaner.lama_cleaner import LamaCleaner
-from src.demark_world.schemas import CleanerType
-from src.demark_world.utils.devices_utils import is_bf16_supported
+from demark_world.cleaner.e2fgvi_hq_cleaner import E2FGVIHDCleaner, E2FGVIHDConfig
+from demark_world.cleaner.lama_cleaner import LamaCleaner
+from demark_world.schemas import CleanerType
+from demark_world.utils.devices_utils import is_bf16_supported
 
 
 class WaterMarkCleaner:

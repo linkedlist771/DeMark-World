@@ -7,19 +7,19 @@ from loguru import logger
 from pydantic import BaseModel
 from tqdm import tqdm
 
-from src.demark_world.configs import (
+from demark_world.configs import (
     E2FGVI_HQ_CHECKPOINT_PATH,
     E2FGVI_HQ_CHECKPOINT_REMOTE_URL,
     E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS,
     E2FGVI_HQ_TORCH_COMPILE_ARTIFACTS_BF16,
     ENABLE_E2FGVI_HQ_TORCH_COMPILE,
 )
-from src.demark_world.models.model.e2fgvi_hq import InpaintGenerator
-from src.demark_world.utils.devices_utils import get_device, is_bf16_supported
-from src.demark_world.utils.download_utils import ensure_model_downloaded
-from src.demark_world.utils.video_utils import merge_frames_with_overlap
-from src.demark_world.utils.mem_utils import memory_profiling
-from src.demark_world.constants import CHUNK_SIZE_PER_GB_VRAM
+from demark_world.models.model.e2fgvi_hq import InpaintGenerator
+from demark_world.utils.devices_utils import get_device, is_bf16_supported
+from demark_world.utils.download_utils import ensure_model_downloaded
+from demark_world.utils.video_utils import merge_frames_with_overlap
+from demark_world.utils.mem_utils import memory_profiling
+from demark_world.constants import CHUNK_SIZE_PER_GB_VRAM
 
 
 def get_ref_index(

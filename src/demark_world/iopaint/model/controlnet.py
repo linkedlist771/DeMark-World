@@ -4,7 +4,7 @@ import torch
 from diffusers import ControlNetModel
 from loguru import logger
 
-from src.demark_world.iopaint.schema import InpaintRequest, ModelType
+from demark_world.iopaint.schema import InpaintRequest, ModelType
 
 from .base import DiffusionInpaintModel
 from .helper.controlnet_preprocess import (

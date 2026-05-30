@@ -10,7 +10,7 @@ from transformers import (
     T5Tokenizer,
 )
 
-from src.demark_world.iopaint.model.anytext.ldm.util import count_params
+from demark_world.iopaint.model.anytext.ldm.util import count_params
 
 
 def _expand_mask(mask, dtype, tgt_len=None):

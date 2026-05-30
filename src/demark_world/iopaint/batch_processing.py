@@ -17,10 +17,10 @@ from rich.progress import (
     TimeElapsedColumn,
 )
 
-from src.demark_world.iopaint.helper import pil_to_bytes
-from src.demark_world.iopaint.model.utils import torch_gc
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.helper import pil_to_bytes
+from demark_world.iopaint.model.utils import torch_gc
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import InpaintRequest
 
 
 def glob_images(path: Path) -> Dict[str, Path]:

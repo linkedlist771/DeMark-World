@@ -4,14 +4,14 @@ import numpy as np
 import torch
 from loguru import logger
 
-from src.demark_world.iopaint.download import scan_models
-from src.demark_world.iopaint.helper import switch_mps_device
-from src.demark_world.iopaint.model import SD, SDXL, ControlNet, models
-from src.demark_world.iopaint.model.brushnet.brushnet_wrapper import BrushNetWrapper
-from src.demark_world.iopaint.model.brushnet.brushnet_xl_wrapper import BrushNetXLWrapper
-from src.demark_world.iopaint.model.power_paint.power_paint_v2 import PowerPaintV2
-from src.demark_world.iopaint.model.utils import is_local_files_only, torch_gc
-from src.demark_world.iopaint.schema import InpaintRequest, ModelInfo, ModelType
+from demark_world.iopaint.download import scan_models
+from demark_world.iopaint.helper import switch_mps_device
+from demark_world.iopaint.model import SD, SDXL, ControlNet, models
+from demark_world.iopaint.model.brushnet.brushnet_wrapper import BrushNetWrapper
+from demark_world.iopaint.model.brushnet.brushnet_xl_wrapper import BrushNetXLWrapper
+from demark_world.iopaint.model.power_paint.power_paint_v2 import PowerPaintV2
+from demark_world.iopaint.model.utils import is_local_files_only, torch_gc
+from demark_world.iopaint.schema import InpaintRequest, ModelInfo, ModelType
 
 
 class ModelManager:

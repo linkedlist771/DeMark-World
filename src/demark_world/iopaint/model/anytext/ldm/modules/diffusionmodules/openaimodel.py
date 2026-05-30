@@ -6,8 +6,8 @@ import torch as th
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.demark_world.iopaint.model.anytext.ldm.modules.attention import SpatialTransformer
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
+from demark_world.iopaint.model.anytext.ldm.modules.attention import SpatialTransformer
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
     avg_pool_nd,
     checkpoint,
     conv_nd,
@@ -16,7 +16,7 @@ from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util im
     timestep_embedding,
     zero_module,
 )
-from src.demark_world.iopaint.model.anytext.ldm.util import exists
+from demark_world.iopaint.model.anytext.ldm.util import exists
 
 
 # dummy replace

@@ -7,9 +7,9 @@ import torch.nn.functional as F
 from loguru import logger
 from torch import nn
 
-from src.demark_world.iopaint.helper import download_model
-from src.demark_world.iopaint.plugins.base_plugin import BasePlugin
-from src.demark_world.iopaint.schema import RealESRGANModel, RunPluginRequest
+from demark_world.iopaint.helper import download_model
+from demark_world.iopaint.plugins.base_plugin import BasePlugin
+from demark_world.iopaint.schema import RealESRGANModel, RunPluginRequest
 
 
 class RealESRGANer:

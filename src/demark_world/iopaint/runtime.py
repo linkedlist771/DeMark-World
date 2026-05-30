@@ -9,7 +9,7 @@ import packaging.version
 from loguru import logger
 from rich import print
 
-from src.demark_world.iopaint.schema import Device
+from demark_world.iopaint.schema import Device
 
 _PY_VERSION: str = sys.version.split()[0].rstrip("+")
 

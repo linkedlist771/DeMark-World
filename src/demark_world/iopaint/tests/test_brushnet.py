@@ -1,7 +1,7 @@
 import os
 
-from src.demark_world.iopaint.const import SD_BRUSHNET_CHOICES
-from src.demark_world.iopaint.tests.utils import assert_equal, check_device, get_config
+from demark_world.iopaint.const import SD_BRUSHNET_CHOICES
+from demark_world.iopaint.tests.utils import assert_equal, check_device, get_config
 
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 from pathlib import Path
@@ -9,8 +9,8 @@ from pathlib import Path
 import pytest
 import torch
 
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import HDStrategy, PowerPaintTask, SDSampler
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import HDStrategy, PowerPaintTask, SDSampler
 
 current_dir = Path(__file__).parent.absolute().resolve()
 save_dir = current_dir / "result"

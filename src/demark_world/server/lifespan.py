@@ -4,8 +4,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from loguru import logger
 
-from src.demark_world.server.db import init_db
-from src.demark_world.server.worker import worker
+from demark_world.server.db import init_db
+from demark_world.server.worker import worker
 
 
 @asynccontextmanager

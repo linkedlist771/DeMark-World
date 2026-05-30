@@ -1,9 +1,9 @@
 import pytest
 import torch
 
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import HDStrategy, LDMSampler
-from src.demark_world.iopaint.tests.utils import assert_equal, check_device, current_dir, get_config
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import HDStrategy, LDMSampler
+from demark_world.iopaint.tests.utils import assert_equal, check_device, current_dir, get_config
 
 
 @pytest.mark.parametrize("device", ["cuda", "mps", "cpu"])

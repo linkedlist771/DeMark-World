@@ -5,7 +5,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from src.demark_world.iopaint.plugins.basicsr.arch_util import default_init_weights
+from demark_world.iopaint.plugins.basicsr.arch_util import default_init_weights
 
 
 class NormStyleCode(nn.Module):

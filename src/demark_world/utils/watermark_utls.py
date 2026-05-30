@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from src.demark_world.configs import WATER_MARK_TEMPLATE_IMAGE_PATH
+from demark_world.configs import WATER_MARK_TEMPLATE_IMAGE_PATH
 
 tmpl = cv2.imread(WATER_MARK_TEMPLATE_IMAGE_PATH)
 tmpl_gray = cv2.cvtColor(tmpl, cv2.COLOR_BGR2GRAY)

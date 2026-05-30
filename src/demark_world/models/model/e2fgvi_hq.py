@@ -4,15 +4,15 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.demark_world.models.model.modules.feat_prop import (
+from demark_world.models.model.modules.feat_prop import (
     BidirectionalPropagation,
     SecondOrderDeformableAlignment,
 )
 
-# from src.demark_world.models.src.demark_world.models.model.modules.flow_comp import SPyNet
-from src.demark_world.models.model.modules.flow_comp import SPyNet
-from src.demark_world.models.model.modules.spectral_norm import spectral_norm as _spectral_norm
-from src.demark_world.models.model.modules.tfocal_transformer_hq import (
+# from demark_world.models.demark_world.models.model.modules.flow_comp import SPyNet
+from demark_world.models.model.modules.flow_comp import SPyNet
+from demark_world.models.model.modules.spectral_norm import spectral_norm as _spectral_norm
+from demark_world.models.model.modules.tfocal_transformer_hq import (
     SoftComp,
     SoftSplit,
     TemporalFocalTransformerBlock,

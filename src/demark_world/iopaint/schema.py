@@ -6,7 +6,7 @@ from typing import List, Literal, Optional
 from loguru import logger
 from pydantic import BaseModel, Field, computed_field, model_validator
 
-from src.demark_world.iopaint.const import (
+from demark_world.iopaint.const import (
     ANYTEXT_NAME,
     INSTRUCT_PIX2PIX_NAME,
     KANDINSKY22_NAME,

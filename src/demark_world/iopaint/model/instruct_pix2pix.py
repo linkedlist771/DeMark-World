@@ -3,8 +3,8 @@ import PIL.Image
 import torch
 from loguru import logger
 
-from src.demark_world.iopaint.const import INSTRUCT_PIX2PIX_NAME
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.const import INSTRUCT_PIX2PIX_NAME
+from demark_world.iopaint.schema import InpaintRequest
 
 from .base import DiffusionInpaintModel
 from .utils import enable_low_mem, get_torch_dtype, is_local_files_only

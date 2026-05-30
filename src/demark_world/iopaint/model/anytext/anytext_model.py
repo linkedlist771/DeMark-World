@@ -1,11 +1,11 @@
 import torch
 from huggingface_hub import hf_hub_download
 
-from src.demark_world.iopaint.const import ANYTEXT_NAME
-from src.demark_world.iopaint.model.anytext.anytext_pipeline import AnyTextPipeline
-from src.demark_world.iopaint.model.base import DiffusionInpaintModel
-from src.demark_world.iopaint.model.utils import get_torch_dtype, is_local_files_only
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.const import ANYTEXT_NAME
+from demark_world.iopaint.model.anytext.anytext_pipeline import AnyTextPipeline
+from demark_world.iopaint.model.base import DiffusionInpaintModel
+from demark_world.iopaint.model.utils import get_torch_dtype, is_local_files_only
+from demark_world.iopaint.schema import InpaintRequest
 
 
 class AnyText(DiffusionInpaintModel):

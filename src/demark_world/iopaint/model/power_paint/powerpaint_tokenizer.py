@@ -4,7 +4,7 @@ from typing import Any, List, Union
 
 from transformers import CLIPTokenizer
 
-from src.demark_world.iopaint.schema import PowerPaintTask
+from demark_world.iopaint.schema import PowerPaintTask
 
 
 def add_task_to_prompt(prompt, negative_prompt, task: PowerPaintTask):

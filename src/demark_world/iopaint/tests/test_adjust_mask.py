@@ -1,7 +1,7 @@
 import cv2
 
-from src.demark_world.iopaint.helper import adjust_mask
-from src.demark_world.iopaint.tests.utils import current_dir, save_dir
+from demark_world.iopaint.helper import adjust_mask
+from demark_world.iopaint.tests.utils import current_dir, save_dir
 
 mask_p = current_dir / "overture-creations-5sI6fQgYIuo_mask.png"
 

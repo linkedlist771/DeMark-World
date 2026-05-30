@@ -9,9 +9,9 @@ from loguru import logger
 from typer import Option
 from typer_config import use_json_config
 
-from src.demark_world.iopaint.const import *
-from src.demark_world.iopaint.runtime import check_device, dump_environment_info, setup_model_dir
-from src.demark_world.iopaint.schema import (
+from demark_world.iopaint.const import *
+from demark_world.iopaint.runtime import check_device, dump_environment_info, setup_model_dir
+from demark_world.iopaint.schema import (
     Device,
     InteractiveSegModel,
     RealESRGANModel,
@@ -23,7 +23,7 @@ typer_app = typer.Typer(pretty_exceptions_show_locals=False, add_completion=Fals
 
 @typer_app.command(help="Install all plugins dependencies")
 def install_plugins_packages():
-    from src.demark_world.iopaint.installer import install_plugins_package
+    from demark_world.iopaint.installer import install_plugins_package
 
     install_plugins_package()
 
@@ -40,7 +40,7 @@ def download(
         callback=setup_model_dir,
     ),
 ):
-    from src.demark_world.iopaint.download import cli_download_model
+    from demark_world.iopaint.download import cli_download_model
 
     cli_download_model(model)
 
@@ -54,7 +54,7 @@ def list_model(
         callback=setup_model_dir,
     ),
 ):
-    from src.demark_world.iopaint.download import scan_models
+    from demark_world.iopaint.download import scan_models
 
     scanned_models = scan_models()
     for it in scanned_models:
@@ -87,14 +87,14 @@ def run(
         callback=setup_model_dir,
     ),
 ):
-    from src.demark_world.iopaint.download import cli_download_model, scan_models
+    from demark_world.iopaint.download import cli_download_model, scan_models
 
     scanned_models = scan_models()
     if model not in [it.name for it in scanned_models]:
         logger.info(f"{model} not found in {model_dir}, try to downloading")
         cli_download_model(model)
 
-    from src.demark_world.iopaint.batch_processing import batch_inpaint
+    from demark_world.iopaint.batch_processing import batch_inpaint
 
     batch_inpaint(model, device, image, mask, output, config, concat)
 
@@ -175,15 +175,15 @@ def start(
         os.environ["TRANSFORMERS_OFFLINE"] = "1"
         os.environ["HF_HUB_OFFLINE"] = "1"
 
-    from src.demark_world.iopaint.download import cli_download_model, scan_models
+    from demark_world.iopaint.download import cli_download_model, scan_models
 
     scanned_models = scan_models()
     if model not in [it.name for it in scanned_models]:
         logger.info(f"{model} not found in {model_dir}, try to downloading")
         cli_download_model(model)
 
-    from src.demark_world.iopaint.api import Api
-    from src.demark_world.iopaint.schema import ApiConfig
+    from demark_world.iopaint.api import Api
+    from demark_world.iopaint.schema import ApiConfig
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -234,6 +234,6 @@ def start_web_config(
     config_file: Path = Option("config.json"),
 ):
     dump_environment_info()
-    from src.demark_world.iopaint.web_config import main
+    from demark_world.iopaint.web_config import main
 
     main(config_file)

@@ -3,7 +3,7 @@ import os
 import cv2
 import torch
 
-from src.demark_world.iopaint.helper import (
+from demark_world.iopaint.helper import (
     boxes_from_mask,
     download_model,
     get_cache_path_by_url,
@@ -11,7 +11,7 @@ from src.demark_world.iopaint.helper import (
     norm_img,
     resize_max_size,
 )
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.schema import InpaintRequest
 
 from .base import InpaintModel
 

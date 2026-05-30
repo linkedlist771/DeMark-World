@@ -8,7 +8,7 @@ from functools import partial
 
 import torch
 
-from src.demark_world.iopaint.plugins.segment_anything.modeling.tiny_vit_sam import TinyViT
+from demark_world.iopaint.plugins.segment_anything.modeling.tiny_vit_sam import TinyViT
 
 from .modeling import ImageEncoderViT, MaskDecoder, PromptEncoder, Sam, TwoWayTransformer
 from .modeling.image_encoder_hq import ImageEncoderViTHQ

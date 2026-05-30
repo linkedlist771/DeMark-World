@@ -4,7 +4,7 @@ import PIL
 import torch
 from PIL import Image
 
-from src.demark_world.iopaint.helper import pad_img_to_modulo
+from demark_world.iopaint.helper import pad_img_to_modulo
 
 
 def make_canny_control_image(image: np.ndarray) -> Image:

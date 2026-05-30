@@ -1,11 +1,11 @@
-import shutil
 import tempfile
 import time
 from pathlib import Path
+
 import streamlit as st
 
-from src.demark_world.core import DeMarkWorld
-from src.demark_world.schemas import CleanerType
+from demark_world.core import DeMarkWorld
+from demark_world.schemas import CleanerType
 
 st.set_page_config(
     page_title="DeMark-World | Universal Watermark Remover",

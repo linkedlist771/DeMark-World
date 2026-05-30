@@ -5,15 +5,15 @@ import numpy as np
 import torch
 from loguru import logger
 
-from src.demark_world.iopaint.helper import download_model
-from src.demark_world.iopaint.plugins.base_plugin import BasePlugin
-from src.demark_world.iopaint.plugins.segment_anything import SamPredictor, sam_model_registry
-from src.demark_world.iopaint.plugins.segment_anything2.build_sam import build_sam2
-from src.demark_world.iopaint.plugins.segment_anything2.sam2_image_predictor import (
+from demark_world.iopaint.helper import download_model
+from demark_world.iopaint.plugins.base_plugin import BasePlugin
+from demark_world.iopaint.plugins.segment_anything import SamPredictor, sam_model_registry
+from demark_world.iopaint.plugins.segment_anything2.build_sam import build_sam2
+from demark_world.iopaint.plugins.segment_anything2.sam2_image_predictor import (
     SAM2ImagePredictor,
 )
-from src.demark_world.iopaint.plugins.segment_anything.predictor_hq import SamHQPredictor
-from src.demark_world.iopaint.schema import RunPluginRequest
+from demark_world.iopaint.plugins.segment_anything.predictor_hq import SamHQPredictor
+from demark_world.iopaint.schema import RunPluginRequest
 
 # 从小到大
 SEGMENT_ANYTHING_MODELS = {

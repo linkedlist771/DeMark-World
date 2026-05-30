@@ -1,12 +1,12 @@
 import os
 
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.schema import InpaintRequest
 
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
 import torch
 
-from src.demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.model_manager import ModelManager
 
 
 def test_model_switch():

@@ -2,22 +2,22 @@ import os
 
 from PIL import Image
 
-from src.demark_world.iopaint.helper import encode_pil_to_base64, gen_frontend_mask
-from src.demark_world.iopaint.plugins.anime_seg import AnimeSeg
-from src.demark_world.iopaint.schema import (
+from demark_world.iopaint.helper import encode_pil_to_base64, gen_frontend_mask
+from demark_world.iopaint.plugins.anime_seg import AnimeSeg
+from demark_world.iopaint.schema import (
     Device,
     InteractiveSegModel,
     RemoveBGModel,
     RunPluginRequest,
 )
-from src.demark_world.iopaint.tests.utils import check_device, current_dir, save_dir
+from demark_world.iopaint.tests.utils import check_device, current_dir, save_dir
 
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
 import cv2
 import pytest
 
-from src.demark_world.iopaint.plugins import (
+from demark_world.iopaint.plugins import (
     GFPGANPlugin,
     InteractiveSeg,
     RealESRGANUpscaler,

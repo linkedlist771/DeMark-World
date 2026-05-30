@@ -261,7 +261,7 @@ except Exception as exc:
             )
 
 
-from src.demark_world.models.model.modules.flow_comp import flow_warp
+from demark_world.models.model.modules.flow_comp import flow_warp
 
 
 class SecondOrderDeformableAlignment(ModulatedDeformConv2d):

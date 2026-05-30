@@ -6,8 +6,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from src.demark_world.iopaint.helper import download_model, get_cache_path_by_url, load_jit_model
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.helper import download_model, get_cache_path_by_url, load_jit_model
+from demark_world.iopaint.schema import InpaintRequest
 
 from .base import InpaintModel
 

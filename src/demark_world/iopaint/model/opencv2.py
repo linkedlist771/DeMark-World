@@ -1,6 +1,6 @@
 import cv2
 
-from src.demark_world.iopaint.schema import InpaintRequest
+from demark_world.iopaint.schema import InpaintRequest
 
 from .base import InpaintModel
 

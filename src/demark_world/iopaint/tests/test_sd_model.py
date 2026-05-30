@@ -2,7 +2,7 @@ import os
 
 from loguru import logger
 
-from src.demark_world.iopaint.tests.utils import assert_equal, check_device, get_config
+from demark_world.iopaint.tests.utils import assert_equal, check_device, get_config
 
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 from pathlib import Path
@@ -10,8 +10,8 @@ from pathlib import Path
 import pytest
 import torch
 
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import HDStrategy, SDSampler
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import HDStrategy, SDSampler
 
 current_dir = Path(__file__).parent.absolute().resolve()
 save_dir = current_dir / "result"

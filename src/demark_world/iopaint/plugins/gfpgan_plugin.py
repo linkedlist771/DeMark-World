@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 from loguru import logger
 
-from src.demark_world.iopaint.helper import download_model
-from src.demark_world.iopaint.plugins.base_plugin import BasePlugin
-from src.demark_world.iopaint.schema import RunPluginRequest
+from demark_world.iopaint.helper import download_model
+from demark_world.iopaint.plugins.base_plugin import BasePlugin
+from demark_world.iopaint.schema import RunPluginRequest
 
 
 class GFPGANPlugin(BasePlugin):

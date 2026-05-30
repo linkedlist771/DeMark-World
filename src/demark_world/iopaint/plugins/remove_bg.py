@@ -6,8 +6,8 @@ import torch
 from loguru import logger
 from torch.hub import get_dir
 
-from src.demark_world.iopaint.plugins.base_plugin import BasePlugin
-from src.demark_world.iopaint.schema import Device, RemoveBGModel, RunPluginRequest
+from demark_world.iopaint.plugins.base_plugin import BasePlugin
+from demark_world.iopaint.schema import Device, RemoveBGModel, RunPluginRequest
 
 
 def _rmbg_remove(device, *args, **kwargs):
@@ -44,7 +44,7 @@ class RemoveBG(BasePlugin):
         self.device_warning()
 
         if model_name == RemoveBGModel.briaai_rmbg_1_4:
-            from src.demark_world.iopaint.plugins.briarmbg import (
+            from demark_world.iopaint.plugins.briarmbg import (
                 briarmbg_process,
                 create_briarmbg_session,
             )
@@ -52,7 +52,7 @@ class RemoveBG(BasePlugin):
             self.session = create_briarmbg_session().to(self.device)
             self.remove = briarmbg_process
         elif model_name == RemoveBGModel.briaai_rmbg_2_0:
-            from src.demark_world.iopaint.plugins.briarmbg2 import (
+            from demark_world.iopaint.plugins.briarmbg2 import (
                 briarmbg2_process,
                 create_briarmbg2_session,
             )

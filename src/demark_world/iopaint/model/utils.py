@@ -25,7 +25,7 @@ from diffusers import (
 from loguru import logger
 from torch import conv2d, conv_transpose2d
 
-from src.demark_world.iopaint.schema import SDSampler
+from demark_world.iopaint.schema import SDSampler
 
 
 def make_beta_schedule(

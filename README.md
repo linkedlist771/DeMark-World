@@ -133,8 +133,8 @@ You can integrate DeMark-World into your own pipelines easily.
 
 ```python
 from pathlib import Path
-from src.demark_world.core import DeMarkWorld
-from src.demark_world.schemas import CleanerType
+from demark_world.core import DeMarkWorld
+from demark_world.schemas import CleanerType
 
 if __name__ == "__main__":
     input_video = Path("resources/Veo3_Cat_Running_In_Forest_Video.mp4")

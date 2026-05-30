@@ -3,7 +3,7 @@ import os
 
 from PIL import Image
 
-from src.demark_world.iopaint.helper import pil_to_bytes
+from demark_world.iopaint.helper import pil_to_bytes
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 

@@ -6,10 +6,10 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from src.demark_world.iopaint.model.anytext.ldm.models.diffusion.sampling_util import (
+from demark_world.iopaint.model.anytext.ldm.models.diffusion.sampling_util import (
     norm_thresholding,
 )
-from src.demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
+from demark_world.iopaint.model.anytext.ldm.modules.diffusionmodules.util import (
     make_ddim_sampling_parameters,
     make_ddim_timesteps,
     noise_like,

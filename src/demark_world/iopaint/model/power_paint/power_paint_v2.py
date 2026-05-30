@@ -7,8 +7,8 @@ import torch
 from loguru import logger
 from transformers import CLIPTextModel, CLIPTokenizer
 
-from src.demark_world.iopaint.model.original_sd_configs import get_config_files
-from src.demark_world.iopaint.schema import InpaintRequest, ModelType
+from demark_world.iopaint.model.original_sd_configs import get_config_files
+from demark_world.iopaint.schema import InpaintRequest, ModelType
 
 from ..base import DiffusionInpaintModel
 from ..helper.cpu_text_encoder import CPUTextEncoderWrapper

@@ -31,8 +31,8 @@ from loguru import logger
 from PIL import Image
 from socketio import AsyncServer
 
-from src.demark_world.iopaint.file_manager import FileManager
-from src.demark_world.iopaint.helper import (
+from demark_world.iopaint.file_manager import FileManager
+from demark_world.iopaint.helper import (
     adjust_mask,
     concat_alpha_channel,
     decode_base64_to_image,
@@ -41,12 +41,12 @@ from src.demark_world.iopaint.helper import (
     numpy_to_bytes,
     pil_to_bytes,
 )
-from src.demark_world.iopaint.model.utils import torch_gc
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.plugins import InteractiveSeg, RealESRGANUpscaler, build_plugins
-from src.demark_world.iopaint.plugins.base_plugin import BasePlugin
-from src.demark_world.iopaint.plugins.remove_bg import RemoveBG
-from src.demark_world.iopaint.schema import (
+from demark_world.iopaint.model.utils import torch_gc
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.plugins import InteractiveSeg, RealESRGANUpscaler, build_plugins
+from demark_world.iopaint.plugins.base_plugin import BasePlugin
+from demark_world.iopaint.plugins.remove_bg import RemoveBG
+from demark_world.iopaint.schema import (
     AdjustMaskRequest,
     ApiConfig,
     GenInfoResponse,

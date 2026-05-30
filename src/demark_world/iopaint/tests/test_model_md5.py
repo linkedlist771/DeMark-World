@@ -1,6 +1,6 @@
 def test_load_model():
-    from src.demark_world.iopaint.model_manager import ModelManager
-    from src.demark_world.iopaint.plugins import InteractiveSeg
+    from demark_world.iopaint.model_manager import ModelManager
+    from demark_world.iopaint.plugins import InteractiveSeg
 
     interactive_seg_model = InteractiveSeg("vit_l", "cpu")
 

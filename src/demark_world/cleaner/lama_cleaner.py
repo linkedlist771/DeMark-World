@@ -5,12 +5,12 @@ import numpy as np
 import torch
 from loguru import logger
 
-from src.demark_world.configs import DEFAULT_WATERMARK_REMOVE_MODEL
-from src.demark_world.iopaint.const import DEFAULT_MODEL_DIR
-from src.demark_world.iopaint.download import cli_download_model, scan_models
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import InpaintRequest
-from src.demark_world.utils.devices_utils import get_device
+from demark_world.configs import DEFAULT_WATERMARK_REMOVE_MODEL
+from demark_world.iopaint.const import DEFAULT_MODEL_DIR
+from demark_world.iopaint.download import cli_download_model, scan_models
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import InpaintRequest
+from demark_world.utils.devices_utils import get_device
 
 # This codebase is from https://github.com/Sanster/IOPaint#, thanks for their amazing work!
 

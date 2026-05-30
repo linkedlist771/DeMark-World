@@ -2,10 +2,10 @@ import cv2
 import pytest
 from PIL import Image
 
-from src.demark_world.iopaint.helper import encode_pil_to_base64
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import HDStrategy
-from src.demark_world.iopaint.tests.utils import (
+from demark_world.iopaint.helper import encode_pil_to_base64
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import HDStrategy
+from demark_world.iopaint.tests.utils import (
     check_device,
     current_dir,
     get_config,

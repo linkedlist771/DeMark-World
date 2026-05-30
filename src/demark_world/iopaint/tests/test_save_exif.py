@@ -5,7 +5,7 @@ from typing import List
 
 from PIL import Image
 
-from src.demark_world.iopaint.helper import load_img, pil_to_bytes
+from demark_world.iopaint.helper import load_img, pil_to_bytes
 
 current_dir = Path(__file__).parent.absolute().resolve()
 

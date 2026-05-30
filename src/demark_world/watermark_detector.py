@@ -1,22 +1,23 @@
-from pathlib import Path
-from typing import List
-
 import numpy as np
 from loguru import logger
 from ultralytics import YOLO
 
-from src.demark_world.configs import WATER_MARK_DETECT_YOLO_WEIGHTS, WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL
-from src.demark_world.utils.devices_utils import get_device
-from src.demark_world.utils.download_utils import ensure_model_downloaded
-from src.demark_world.utils.video_utils import VideoLoader
+from demark_world.configs import (
+    WATER_MARK_DETECT_YOLO_WEIGHTS,
+    WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL,
+)
+from demark_world.utils.devices_utils import get_device
+from demark_world.utils.download_utils import ensure_model_downloaded
 
 # based on the sora tempalte to detect the whole, and then got the icon part area.
 
 
 class DeMarkWorldDetector:
     def __init__(self):
-        ensure_model_downloaded(WATER_MARK_DETECT_YOLO_WEIGHTS, WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL)
-        logger.debug(f"Begin to load yolo water mark detet model.")
+        ensure_model_downloaded(
+            WATER_MARK_DETECT_YOLO_WEIGHTS, WATER_MARK_DETECT_YOLO_WEIGHTS_REMOTE_URL
+        )
+        logger.debug("Begin to load yolo water mark detet model.")
         self.model = YOLO(WATER_MARK_DETECT_YOLO_WEIGHTS)
         self.model.to(str(get_device()))
         self.model.eval()
@@ -46,7 +47,7 @@ class DeMarkWorldDetector:
         result = results[0]
         return self._parse_detect_results(result)
 
-    def detect_batch(self, input_images: List[np.ndarray], batch_size: int) -> List[dict]:
+    def detect_batch(self, input_images: list[np.ndarray], batch_size: int) -> list[dict]:
         if not input_images:
             return []
 

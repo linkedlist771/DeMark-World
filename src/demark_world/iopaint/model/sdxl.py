@@ -6,7 +6,7 @@ import torch
 from diffusers import AutoencoderKL
 from loguru import logger
 
-from src.demark_world.iopaint.schema import InpaintRequest, ModelType
+from demark_world.iopaint.schema import InpaintRequest, ModelType
 
 from .base import DiffusionInpaintModel
 from .helper.cpu_text_encoder import CPUTextEncoderWrapper

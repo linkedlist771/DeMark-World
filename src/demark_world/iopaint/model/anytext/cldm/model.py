@@ -3,7 +3,7 @@ import os
 import torch
 from omegaconf import OmegaConf
 
-from src.demark_world.iopaint.model.anytext.ldm.util import instantiate_from_config
+from demark_world.iopaint.model.anytext.ldm.util import instantiate_from_config
 
 
 def get_state_dict(d):

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from src.demark_world.server.lifespan import lifespan
-from src.demark_world.server.router import router
+from demark_world.server.lifespan import lifespan
+from demark_world.server.router import router
 
 
 def init_app():

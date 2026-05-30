@@ -1,7 +1,7 @@
 import numpy as np
 from loguru import logger
 
-from src.demark_world.iopaint.schema import RunPluginRequest
+from demark_world.iopaint.schema import RunPluginRequest
 
 
 class BasePlugin:

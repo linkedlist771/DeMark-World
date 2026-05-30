@@ -9,8 +9,8 @@ import nvidia_smi
 import psutil
 import torch
 
-from src.demark_world.iopaint.model_manager import ModelManager
-from src.demark_world.iopaint.schema import HDStrategy, InpaintRequest, SDSampler
+from demark_world.iopaint.model_manager import ModelManager
+from demark_world.iopaint.schema import HDStrategy, InpaintRequest, SDSampler
 
 try:
     torch._C._jit_override_can_fuse_on_cpu(False)

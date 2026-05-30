@@ -5,9 +5,9 @@ import aiofiles
 from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Query, UploadFile
 from fastapi.responses import FileResponse
 
-from src.demark_world.schemas import CleanerType
-from src.demark_world.server.schemas import QueueStatusResponse, WMRemoveResults
-from src.demark_world.server.worker import worker
+from demark_world.schemas import CleanerType
+from demark_world.server.schemas import QueueStatusResponse, WMRemoveResults
+from demark_world.server.worker import worker
 
 router = APIRouter()
 

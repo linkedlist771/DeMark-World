@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
-from src.demark_world.configs import SQLITE_PATH
+from demark_world.configs import SQLITE_PATH
 
 
 class Base(DeclarativeBase):
