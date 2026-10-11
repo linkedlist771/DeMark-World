@@ -29,9 +29,26 @@ class DeMarkWorld:
         enable_torch_compile: bool = ENABLE_E2FGVI_HQ_TORCH_COMPILE,
         detect_batch_size: int = DEFAULT_DETECT_BATCH_SIZE,
         use_bf16: bool = is_bf16_supported(),
+        *,
+        automatic_detection: bool = True,
+        detector: Any | None = None,
+        cleaner: Any | None = None,
     ):
-        self.detector = DeMarkWorldDetector()
-        self.cleaner = WaterMarkCleaner(cleaner_type, enable_torch_compile, use_bf16=use_bf16)
+        """Create the selected cleaner and, by default, its automatic detector.
+
+        Set automatic_detection=False to supply reviewed watermark_regions to run.
+        Injected detector/cleaner objects override construction for that component.
+        detect_batch_size must be positive; the selected cleaner_type still
+        determines whether the timed LaMa path is available.
+        """
+        if detect_batch_size < 1:
+            raise ValueError("detect_batch_size must be at least 1")
+        self.detector = detector if detector is not None else (
+            DeMarkWorldDetector() if automatic_detection else None
+        )
+        self.cleaner = cleaner if cleaner is not None else WaterMarkCleaner(
+            cleaner_type, enable_torch_compile, use_bf16=use_bf16
+        )
         self.cleaner_type = cleaner_type
         self.detect_batch_size = detect_batch_size
 
@@ -42,6 +59,7 @@ class DeMarkWorld:
         progress_callback: Callable[[int], None] | None = None,
         quiet: bool = False,
     ):
+        """Process supported files recursively, reporting aggregate progress."""
         if output_video_dir_path is None:
             output_video_dir_path = input_video_dir_path.parent / "watermark_removed"
             if not quiet:
@@ -63,6 +81,7 @@ class DeMarkWorld:
             if progress_callback:
 
                 def batch_progress_callback(single_video_progress: int):
+                    """Convert single-video progress to progress across this batch."""
                     overall_progress = int(
                         (idx / video_lengths) * 100 + (single_video_progress / video_lengths)
                     )
@@ -88,7 +107,27 @@ class DeMarkWorld:
         output_video_path: Path,
         progress_callback: Callable[[int], None] | None = None,
         quiet: bool = False,
+        watermark_regions: list | None = None,
     ):
+        """Restore a video using detector boxes or explicit timed regions.
+
+        watermark_regions selects the LaMa-only MP4 path. Boxes are normalized;
+        frame intervals are zero-based, start-inclusive and end-exclusive.
+        Bare boxes span the decoded video. This opt-in path preserves existing
+        outputs, checks the complete result, and propagates finishing timeouts.
+        Without regions, the historical automatic-detection workflow is used.
+        """
+        if watermark_regions is not None:
+            if self.cleaner_type != CleanerType.LAMA:
+                raise ValueError("Timed regions currently support the LaMa backend only")
+            from src.demark_world.timed_cleaning import clean_timed_video
+
+            return clean_timed_video(
+                input_video_path, output_video_path, watermark_regions,
+                self.cleaner, progress_callback=progress_callback,
+            )
+        if self.detector is None:
+            raise ValueError("Supply watermark_regions when automatic detection is disabled")
         input_video_loader = VideoLoader(input_video_path)
         output_video_path.parent.mkdir(parents=True, exist_ok=True)
         width = input_video_loader.width
@@ -369,6 +408,7 @@ class DeMarkWorld:
     def merge_audio_track(
         self, input_video_path: Path, temp_output_path: Path, output_video_path: Path
     ):
+        """Mux available input audio with the legacy silent-video fallback."""
         logger.info("Merging audio track...")
 
         has_audio = False

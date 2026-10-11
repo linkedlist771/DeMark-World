@@ -56,6 +56,10 @@ Moving beyond just Sora v2 in [SoraWatermarkCleaner](https://github.com/linkedli
 | **4 interfaces** | Web UI · Python API · CLI · REST Server |
 | **Docker support** | GPU-enabled `docker-compose.yaml` included |
 
+## Reviewed timed regions
+
+For intermittent watermarks or detector mistakes, the LaMa Python API accepts reviewed boxes with exact start/stop frames. See [timed-region API documentation](docs/timed-regions.md). The existing automatic detector workflow remains unchanged.
+
 ## 🛠️ Installation
 
 **Prerequisites**: You must have [FFmpeg](https://ffmpeg.org/) installed and added to your system PATH.
